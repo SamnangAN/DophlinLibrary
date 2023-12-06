@@ -16,7 +16,12 @@ public class Util {
 	public static final Color INFO_MESSAGE_COLOR = new Color(24, 98, 19); //dark green
 	public static final Color LINK_AVAILABLE = DARK_BLUE;
 	public static final Color LINK_NOT_AVAILABLE = Color.gray;
+	public static final String CUR_DIRECTORY = System.getProperty("user.dir");
 	//rgb(18, 75, 14)
+	
+	public static String getImagePath() {
+    	return CUR_DIRECTORY +"/src/images/";
+    }
 	
 	public static Font makeSmallFont(Font f) {
         return new Font(f.getName(), f.getStyle(), (f.getSize()-2));
