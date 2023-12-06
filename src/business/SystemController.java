@@ -58,8 +58,29 @@ public class SystemController implements ControllerInterface {
 		da.saveNewMember(member);
 		da.saveBook(book);
 	}
+	
 	@Override
-	public void checkBookOverdue(String isbn) {
+	public HashMap<BookCopy, CheckoutRecordEntry> checkBookOverdue(String isbn) throws LibrarySystemException{
+		DataAccess da = new DataAccessFacade();		
+		HashMap<BookCopy, CheckoutRecordEntry> result = new HashMap<BookCopy, CheckoutRecordEntry> ();
+		Book book = da.searchBook(isbn);
+		if(book==null) {
+			throw new LibrarySystemException("Book with given ISBN was not found!");
+		}
+		
+		for (BookCopy bookCopy: book.getCopies()) {
+			result.put(bookCopy, null);
+		}
+
+		for (LibraryMember member: da.readMemberMap().values()) {
+			for (CheckoutRecordEntry entry: member.getCheckoutRecord().getCheckoutRecordEntries()) {
+				if (entry.getBookCopy().getBook().equals(book)) {
+					result.put(entry.getBookCopy(), entry);
+				}
+			}
+		}
+		return result;
+		
 	}
 	
 	

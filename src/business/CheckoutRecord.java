@@ -8,9 +8,11 @@ public final class CheckoutRecord implements Serializable{
 	private static final long serialVersionUID = 6578027413885460074L;	
 	
 	private List<CheckoutRecordEntry> checkoutRecordEntries;
+	private LibraryMember libraryMember;
 	
-	public CheckoutRecord() {
+	public CheckoutRecord(LibraryMember libraryMember) {
 		this.setCheckoutRecordEntries(new ArrayList<CheckoutRecordEntry>());
+		this.setLibraryMember(libraryMember);
 	}
 
 	public List<CheckoutRecordEntry> getCheckoutRecordEntries() {
@@ -28,6 +30,14 @@ public final class CheckoutRecord implements Serializable{
 	@Override
 	public String toString() {
 		return "CheckoutRecord [checkoutRecordEntries=" + checkoutRecordEntries + "]";
+	}
+
+	public LibraryMember getLibraryMember() {
+		return libraryMember;
+	}
+
+	public void setLibraryMember(LibraryMember libraryMember) {
+		this.libraryMember = libraryMember;
 	}
 	
 }
