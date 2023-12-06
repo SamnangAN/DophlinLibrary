@@ -79,9 +79,7 @@ public class SystemController implements ControllerInterface {
 				}
 			}
 		}
-		return result;
-		
-	}
-	
+		return result; 		
+	}	
 	
 }

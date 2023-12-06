@@ -8,7 +8,7 @@ public final class CheckoutRecord implements Serializable{
 	private static final long serialVersionUID = 6578027413885460074L;	
 	
 	private List<CheckoutRecordEntry> checkoutRecordEntries;
-	private LibraryMember libraryMember;
+	private LibraryMember libraryMember; 
 	
 	public CheckoutRecord(LibraryMember libraryMember) {
 		this.setCheckoutRecordEntries(new ArrayList<CheckoutRecordEntry>());
