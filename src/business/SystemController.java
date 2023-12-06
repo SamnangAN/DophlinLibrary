@@ -1,5 +1,6 @@
 package business;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,26 @@ public class SystemController implements ControllerInterface {
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
+	}
+	
+	@Override
+	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException{
+		DataAccess da = new DataAccessFacade();
+		LibraryMember member = da.searchMember(memberId);
+		if(member == null) {
+			throw new LibrarySystemException("Given Member ID does not exist!");
+		}
+		Book book = da.searchBook(isbn);
+		if(book == null || !book.isAvailable()) {
+			throw new LibrarySystemException("Book with given ISBN is not available!");
+		}
+
+		member.checkout(book.getNextAvailableCopy(), LocalDate.now(), LocalDate.now().plusDays(book.getMaxCheckoutLength()));
+		da.saveNewMember(member);
+		da.saveBook(book);
+	}
+	@Override
+	public void checkBookOverdue(String isbn) {
 	}
 	
 	

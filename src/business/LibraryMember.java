@@ -9,6 +9,7 @@ import dataaccess.DataAccessFacade;
 
 final public class LibraryMember extends Person implements Serializable {
 	private String memberId;
+	private CheckoutRecord checkoutRecord;
 	
 	public LibraryMember(String memberId, String fname, String lname, String tel,Address add) {
 		super(fname,lname, tel, add);
@@ -20,6 +21,10 @@ final public class LibraryMember extends Person implements Serializable {
 		return memberId;
 	}
 
+	public void checkout(BookCopy bookCopy, LocalDate checkoutDate, LocalDate dueDate) {
+		bookCopy.changeAvailability();
+		this.checkoutRecord.addCheckoutRecordEntry(new CheckoutRecordEntry(bookCopy, checkoutDate, dueDate));	
+	}
 	
 	
 	@Override

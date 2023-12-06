@@ -10,5 +10,6 @@ public interface ControllerInterface {
 	public void login(String id, String password) throws LoginException;
 	public List<String> allMemberIds();
 	public List<String> allBookIds();
-	
+	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
+	public void checkBookOverdue(String isbn);
 }
