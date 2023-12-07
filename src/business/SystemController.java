@@ -1,5 +1,6 @@
 package business;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,5 +42,44 @@ public class SystemController implements ControllerInterface {
 		return retval;
 	}
 	
+	@Override
+	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException{
+		DataAccess da = new DataAccessFacade();
+		LibraryMember member = da.searchMember(memberId);
+		if(member == null) {
+			throw new LibrarySystemException("Given Member ID does not exist!");
+		}
+		Book book = da.searchBook(isbn);
+		if(book == null || !book.isAvailable()) {
+			throw new LibrarySystemException("Book with given ISBN is not available!");
+		}
+
+		member.checkout(book.getNextAvailableCopy(), LocalDate.now(), LocalDate.now().plusDays(book.getMaxCheckoutLength()));
+		da.saveNewMember(member);
+		da.saveBook(book);
+	}
+	
+	@Override
+	public HashMap<BookCopy, CheckoutRecordEntry> checkBookOverdue(String isbn) throws LibrarySystemException{
+		DataAccess da = new DataAccessFacade();		
+		HashMap<BookCopy, CheckoutRecordEntry> result = new HashMap<BookCopy, CheckoutRecordEntry> ();
+		Book book = da.searchBook(isbn);
+		if(book==null) {
+			throw new LibrarySystemException("Book with given ISBN was not found!");
+		}
+		
+		for (BookCopy bookCopy: book.getCopies()) {
+			result.put(bookCopy, null);
+		}
+
+		for (LibraryMember member: da.readMemberMap().values()) {
+			for (CheckoutRecordEntry entry: member.getCheckoutRecord().getCheckoutRecordEntries()) {
+				if (entry.getBookCopy().getBook().equals(book)) {
+					result.put(entry.getBookCopy(), entry);
+				}
+			}
+		}
+		return result; 		
+	}	
 	
 }

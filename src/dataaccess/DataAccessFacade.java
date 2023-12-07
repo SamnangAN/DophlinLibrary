@@ -22,7 +22,7 @@ public class DataAccessFacade implements DataAccess {
 	}
 	
 	public static final String OUTPUT_DIR = System.getProperty("user.dir") 
-			+ "/src/dataaccess/storage";
+			+ "\\src\\dataaccess\\storage";
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
 	
 	//implement: other save operations
@@ -33,11 +33,26 @@ public class DataAccessFacade implements DataAccess {
 		saveToStorage(StorageType.MEMBERS, mems);	
 	}
 	
+	@Override
+	public void saveBook(Book book) {
+		HashMap<String, Book> books = readBooksMap();
+		String isbn = book.getIsbn();
+		books.put(isbn, book);
+		saveToStorage(StorageType.BOOKS, books);
+		
+	}
+	
 	@SuppressWarnings("unchecked")
 	public  HashMap<String,Book> readBooksMap() {
 		//Returns a Map with name/value pairs being
 		//   isbn -> Book
 		return (HashMap<String,Book>) readFromStorage(StorageType.BOOKS);
+	}
+	
+	@Override
+	public Book searchBook(String isbn) {
+		HashMap<String,Book> bookMap = readBooksMap();
+		return bookMap.get(isbn);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -48,6 +63,15 @@ public class DataAccessFacade implements DataAccess {
 				StorageType.MEMBERS);
 	}
 	
+
+	@Override
+	public LibraryMember searchMember(String memberId) {
+		HashMap<String, LibraryMember> memberMap = readMemberMap();		
+		return memberMap.get(memberId);
+	}
+	
+
+
 	
 	@SuppressWarnings("unchecked")
 	public HashMap<String, User> readUserMap() {
