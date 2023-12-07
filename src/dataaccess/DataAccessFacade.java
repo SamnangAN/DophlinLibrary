@@ -22,7 +22,7 @@ public class DataAccessFacade implements DataAccess {
 	}
 	
 	public static final String OUTPUT_DIR = System.getProperty("user.dir") 
-			+ "\\src\\dataaccess\\storage";
+			+ "/src/dataaccess/storage";
 	public static final String DATE_PATTERN = "MM/dd/yyyy";
 	
 	//implement: other save operations
@@ -66,7 +66,7 @@ public class DataAccessFacade implements DataAccess {
 
 	@Override
 	public LibraryMember searchMember(String memberId) {
-		HashMap<String, LibraryMember> memberMap = readMemberMap();		
+		HashMap<String, LibraryMember> memberMap = readMemberMap();	
 		return memberMap.get(memberId);
 	}
 	

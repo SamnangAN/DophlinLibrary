@@ -1,12 +1,16 @@
 package librarysystem;
 
 import javax.imageio.ImageIO;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import business.Address;
 import business.ControllerInterface;
 import business.LibraryMember;
 import business.SystemController;
+import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 
 import java.awt.*;
@@ -16,9 +20,13 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
+import java.awt.print.Book;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,11 +36,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 
-public class LibraryManagementUI extends JFrame {
+public class AddNewMemberUI extends JFrame {
+	
 	ControllerInterface ci = new SystemController();
+	
 	DataAccessFacade ac = new DataAccessFacade();
-	ArrayList<LibraryMember> m = new ArrayList<LibraryMember>();
-    public LibraryManagementUI() {
+//	ArrayList<LibraryMember> m = new ArrayList<LibraryMember>();
+    public AddNewMemberUI() {   	
         setTitle("Library Management System");
         setSize(2000, 1000);
        
@@ -72,12 +82,6 @@ public class LibraryManagementUI extends JFrame {
 
         // Create form on the right side with a background image
         JPanel formPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Image backgroundImage = new ImageIcon("src/images/bg.jpg").getImage();
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), (ImageObserver) this);
-            }
         };
         formPanel.setLayout(new GridLayout(9, 2, 10, 5));  
 
@@ -117,14 +121,41 @@ public class LibraryManagementUI extends JFrame {
         JButton addButton = new JButton("Add Members");
         addButton.addActionListener(e -> addMember());
         bt.add(addButton);
+        formPanel.add(addButton);
+        
+        DefaultTableModel modelRight = new DefaultTableModel();
+        modelRight.addColumn("Member ID");
+        modelRight.addColumn("First Name");
+        modelRight.addColumn("Last Name");
+        modelRight.addColumn("Street");
+        modelRight.addColumn("City");
+        modelRight.addColumn("State");
+        modelRight.addColumn("ZIP");
+        modelRight.addColumn("Telephone");
+        
+       
+        DataAccess access = new DataAccessFacade();
+		HashMap<String,LibraryMember> v = access.readMemberMap();
+		List<LibraryMember> mems = v.values().stream().collect(Collectors.toList());
+        for (LibraryMember member : mems) {
+        	System.out.print("id:"+member.getMemberId());
+            Object[] rowDatas = {member.getMemberId(), member.getFirstName(), member.getLastName(),
+                    member.getAddress().getStreet(), member.getAddress().getCity(), member.getAddress().getState(),member.getAddress().getZip(), member.getTelephone()};
+            modelRight.addRow(rowDatas);
+        }
+        JTable memberTable = new JTable(modelRight);
+        JScrollPane tableScrollPane = new JScrollPane(memberTable);
+        formPanel.add(memberTable);
+        
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 50, 100));
+
 
         // Add components to the main frame
         setLayout(new BorderLayout());
         add(buttonPanel, BorderLayout.WEST);
         add(formPanel, BorderLayout.CENTER);
-        add(bt, BorderLayout.SOUTH);
        
-
+        
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -139,19 +170,30 @@ public class LibraryManagementUI extends JFrame {
                 String telephone = telephoneField.getText();
                 Address a = new Address(street,city,state,zip);
 
-                // Perform the action (e.g., add new member)
-                m.add(new LibraryMember(memberId,firstName,lastName,telephone,a) );
+                LibraryMember mems = new LibraryMember(memberId,firstName,lastName,telephone,a);
+                ci.saveNewMember(mems);
+               
+                
+                showMessage("You have been added a member successfully");
+                Object[] rowData = {memberId,firstName, lastName,
+                		street, city,state,zip, telephone};
+                modelRight.addRow(rowData);
                 
     
             }
         });
+        
       //  formPanel.add(addMemberButton);
 
         formPanel.revalidate();
         formPanel.repaint();
+       
     }
-
-
+    private void showMessage(String message) {
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+        });
+    }
     
 
     private Object addMember() {
@@ -164,7 +206,7 @@ public class LibraryManagementUI extends JFrame {
 
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new LibraryManagementUI().setVisible(true);
+            new AddNewMemberUI().setVisible(true);
         });
     }
 }

@@ -3,7 +3,9 @@ package librarysystem;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.TextArea;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,7 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import business.ControllerInterface;
+import business.LibraryMember;
 import business.SystemController;
+import dataaccess.DataAccessFacade;
 
 
 public class AllMemberIdsWindow extends JFrame implements LibWindow {
@@ -30,6 +34,10 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 	private AllMemberIdsWindow() {}
 	
 	public void init() {
+		
+		
+		
+		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 		defineTopPanel();
