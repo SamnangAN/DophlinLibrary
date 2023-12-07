@@ -1,2 +1,6 @@
-/librarysystem/
+/.classpath
+/.project
+/.DS_Store
+
+
 /dataaccess/

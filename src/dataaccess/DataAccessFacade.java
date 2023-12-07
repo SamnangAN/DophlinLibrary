@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import business.Book;
 import business.BookCopy;
@@ -55,6 +56,34 @@ public class DataAccessFacade implements DataAccess {
 		return bookMap.get(isbn);
 	}
 	
+	@Override
+	public List<Book> searchBook(String isbn,String title) {
+		HashMap<String,Book> bookMap = readBooksMap();
+		return bookMap.values().stream()
+		.filter(book -> filterBooks(book,isbn,title))
+		.collect(Collectors.toList());
+	}
+	
+	private boolean filterBooks(Book book, String isbn, String title) {
+		boolean matchIsbn = false;
+		boolean matchTitle = false;
+		if(isbn != null && !isbn.isEmpty()) {
+			if(book.getIsbn().toLowerCase().contains(isbn.toLowerCase())) {
+				matchIsbn = true;
+			}
+		}else {
+			matchIsbn = true;
+		}
+		if(title != null && !title.isEmpty()) {
+			if(book.getTitle().toLowerCase().contains(title.toLowerCase())) {
+				matchTitle = true;
+			}
+		}else {
+			matchTitle = true;
+		}
+		return matchIsbn && matchTitle;
+	}
+
 	@SuppressWarnings("unchecked")
 	public HashMap<String, LibraryMember> readMemberMap() {
 		//Returns a Map with name/value pairs being

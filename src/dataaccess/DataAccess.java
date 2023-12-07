@@ -1,6 +1,7 @@
 package dataaccess;
 
 import java.util.HashMap;
+import java.util.List;
 
 import business.Book;
 import business.LibraryMember;
@@ -15,5 +16,6 @@ public interface DataAccess {
 	
 	public LibraryMember searchMember(String memberId);
 	public Book searchBook(String isbn);
+	List<Book> searchBook(String isbn, String title);
 	
 }
