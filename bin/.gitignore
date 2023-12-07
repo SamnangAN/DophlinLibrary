@@ -1,4 +1,14 @@
+<<<<<<< HEAD
+/.classpath
+/.project
+/business/
+/dataaccess/
+/images/
+/librarysystem/
+/.DS_Store
+=======
 /librarysystem/
 /dataaccess/
 /images/
 /util/
+>>>>>>> 41a33c93ceebc4d2e1393df664d38c9fcea7e4cf
