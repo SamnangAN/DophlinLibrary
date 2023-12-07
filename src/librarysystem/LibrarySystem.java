@@ -1,6 +1,7 @@
 package librarysystem;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -30,14 +31,14 @@ import business.SystemController;
 
 
 public class LibrarySystem extends JFrame implements LibWindow {
-	ControllerInterface ci = new SystemController();
+	
 	public final static LibrarySystem INSTANCE =new LibrarySystem();
-	JPanel mainPanel;
-	JMenuBar menuBar;
-    JMenu options;
-    JMenuItem login, allBookIds, allMemberIds; 
-    String pathToImage;
+	private JPanel mainPanel, cardPanel;
+	private JMenuBar menuBar = new JMenuBar();
+    private String pathToImage;
     private boolean isInitialized = false;
+    
+    private ControllerInterface ci = new SystemController();
     
     private static LibWindow[] allWindows = { 
     	LibrarySystem.INSTANCE,
@@ -58,25 +59,40 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	setPathToImage();
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
-    	JPanel panel = new JPanel() {
+        
+    	mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 // Load the background image
-                ImageIcon backgroundImage = new ImageIcon(Util.getImagePath() + "library.jpg");
+                ImageIcon backgroundImage = new ImageIcon(pathToImage + "library.jpg");
                 Image image = backgroundImage.getImage();
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
         
-        panel.setLayout(new BorderLayout());
+        mainPanel.setLayout(new BorderLayout());  
+        getContentPane().add(mainPanel);
+        setLocationRelativeTo(null); // Center the frame
+        showLoginPage();
+        createMenus();
+        isInitialized = true;
+    }
+    
+    public void initCardPanel() {
+    	cardPanel = new JPanel(new CardLayout());
 
-        // Center label
-        JLabel centerLabel = new JLabel("Dolphin Library");
-        centerLabel.setForeground(Color.WHITE); // Set text color
-//        centerLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        centerLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 45));
-        panel.add(centerLabel, BorderLayout.CENTER);
+    //	cardPanel.add(new HomePanel(this), MENUS.HOME.getText());
+    //	cardPanel.add(CheckOutPanel.getInstance(), MenuType.CHECKOUT.getText());
+    //	cardPanel.add(OverDuePanel.getInstance(), MenuType.OVERDUE.getText());
+	//	cardPanel.add(BookPanel.getInstance(), MenuType.BOOK.getText());
+    //	cardPanel.add(LibraryMemberPanel.getInstance(), MenuType.MEMBER.getText());
+    	
+    	mainPanel.add(cardPanel, BorderLayout.CENTER);
+    }
+    
+    private void showLoginPage() {
+    	insertLibraryName();    
 
         // Login button at the top right
         JButton loginButton = new JButton("Login");
@@ -86,75 +102,42 @@ public class LibrarySystem extends JFrame implements LibWindow {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false); // Make the button panel transparent
         buttonPanel.add(loginButton);
-        panel.add(buttonPanel, BorderLayout.NORTH);
+        mainPanel.add(buttonPanel, BorderLayout.NORTH);
 
         // Set an empty border to center the content
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-
-        getContentPane().add(panel);
-        setLocationRelativeTo(null); // Center the frame
-        
-//        
-//        
-//    	formatContentPane();
-//    	
-//    	insertSplashImage();
-//    	insertLibraryName();
-//		
-//		createMenus();
-//		//pack();
-//		setSize(1200,800);
-//		isInitialized = true;
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
     }
     
     private void setPathToImage() {
     	String currDirectory = System.getProperty("user.dir");
-    	pathToImage = currDirectory+"/src/images/library2.jpg";
+    	pathToImage = currDirectory+"/src/images/";
     }
     
-//    private void insertLibraryName() {
-//    	JLabel label = new JLabel("Dolphin Library");
-//        label.setHorizontalAlignment(SwingConstants.CENTER);
-//
-//        mainPanel.add(label, BorderLayout.CENTER);
-//		
-//	}
-//
-//	private void formatContentPane() {
-//		mainPanel = new JPanel();
-//		mainPanel.setLayout(new GridLayout(1,1));
-//		getContentPane().add(mainPanel);	
-//	}
-//    
+    private void insertLibraryName() {
+        JLabel centerLabel = new JLabel("Dolphin Library");
+        centerLabel.setForeground(Color.WHITE); // Set text color
+        centerLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 45));
+        mainPanel.add(centerLabel, BorderLayout.CENTER);
+    }
     
-//    
-//    private void insertSplashImage() {
-//        ImageIcon image = new ImageIcon(pathToImage);
-//        JLabel imageLabel = new JLabel(image);
-//        imageLabel.setSize(mainPanel.getWidth(), mainPanel.getHeight());
-//		mainPanel.add(imageLabel);	
-//    }
-//    private void createMenus() {
-//    	menuBar = new JMenuBar();
-//		menuBar.setBorder(BorderFactory.createRaisedBevelBorder());
-//		addMenuItems();
-//		setJMenuBar(menuBar);		
-//    }
-//    
-//    private void addMenuItems() {
-//       options = new JMenu("Options");  
-// 	   menuBar.add(options);
-// 	   login = new JMenuItem("Login");
-// 	   login.addActionListener(new LoginListener());
-// 	   allBookIds = new JMenuItem("All Book Ids");
-// 	   allBookIds.addActionListener(new AllBookIdsListener());
-// 	   allMemberIds = new JMenuItem("All Member Ids");
-// 	   allMemberIds.addActionListener(new AllMemberIdsListener());
-// 	   options.add(login);
-// 	   options.add(allBookIds);
-// 	   options.add(allMemberIds);
-//    }
-//    
+
+	private void createMenus() {
+	     // Add the custom menu to the menu bar
+	     menuBar.add(createCustomJMenu(MENUS.HOME, new MenuListener()));
+	     menuBar.add(createCustomJMenu(MENUS.BOOKS, new MenuListener()));
+	     menuBar.add(createCustomJMenu(MENUS.CHECKOUTS, new MenuListener()));
+	     menuBar.add(createCustomJMenu(MENUS.MEMBERS, new MenuListener()));
+	     setJMenuBar(menuBar);
+    }
+	
+	private JMenu createCustomJMenu(MENUS menu, ActionListener actionListener) {
+		JMenu customMenu = new JMenu(menu.getText());
+	    customMenu.setIcon(new ImageIcon(menu.getIconName()));
+	    customMenu.addActionListener(actionListener);
+	    return customMenu;	
+	}
+    
+       
     class LoginListener implements ActionListener {
 
 		@Override
@@ -163,9 +146,19 @@ public class LibrarySystem extends JFrame implements LibWindow {
 			LoginWindow.INSTANCE.init();
 			Util.centerFrameOnDesktop(LoginWindow.INSTANCE);
 			LoginWindow.INSTANCE.setVisible(true);
-			
 		}
     	
+    }
+    
+    class MenuListener implements ActionListener {
+    	@Override
+		public void actionPerformed(ActionEvent e) {
+			LibrarySystem.hideAllWindows();
+			LoginWindow.INSTANCE.setVisible(false);
+	//		Util.centerFrameOnDesktop(.INSTANCE);
+	//		LoginWindow.INSTANCE.setVisible(true);
+			
+		}
     }
 //    class AllBookIdsListener implements ActionListener {
 //

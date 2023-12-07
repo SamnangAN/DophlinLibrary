@@ -10,6 +10,31 @@ import java.util.List;
 
 import javax.swing.JLabel;
 
+
+enum MENUS {
+	HOME("Home", Util.getImagePath()+"menu_home.png"), 
+	BOOKS("Books", Util.getImagePath()+"menu_books.png"), 
+	CHECKOUTS("Check Outs", Util.getImagePath()+"menu_checkouts.png"), 
+	MEMBERS("Members", Util.getImagePath()+"menu_members.png");
+
+	private String text;
+	private String iconName;
+	
+	MENUS(String text, String iconName) {
+		this.text = text;
+		this.iconName = iconName;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public String getIconName() {
+		return iconName;
+	}
+	
+}
+
 public class Util {
 	public static final Color DARK_BLUE = Color.BLUE.darker();
 	public static final Color ERROR_MESSAGE_COLOR = Color.RED.darker(); //dark red
