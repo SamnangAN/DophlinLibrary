@@ -2,6 +2,13 @@ package librarysystem;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import business.Address;
+import business.ControllerInterface;
+import business.LibraryMember;
+import business.SystemController;
+import dataaccess.DataAccessFacade;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +18,7 @@ import java.awt.*;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +29,9 @@ import java.awt.*;
 import java.awt.image.ImageObserver;
 
 public class LibraryManagementUI extends JFrame {
+	ControllerInterface ci = new SystemController();
+	DataAccessFacade ac = new DataAccessFacade();
+	ArrayList<LibraryMember> m = new ArrayList<LibraryMember>();
     public LibraryManagementUI() {
         setTitle("Library Management System");
         setSize(2000, 1000);
@@ -68,7 +79,7 @@ public class LibraryManagementUI extends JFrame {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), (ImageObserver) this);
             }
         };
-        formPanel.setLayout(new GridLayout(8, 2, 10, 5));  
+        formPanel.setLayout(new GridLayout(9, 2, 10, 5));  
 
         formPanel.add(new JLabel("Member ID:"));
         JTextField memberIdField = new JTextField();
@@ -101,14 +112,20 @@ public class LibraryManagementUI extends JFrame {
         formPanel.add(new JLabel("Telephone:"));
         JTextField telephoneField = new JTextField();
         formPanel.add(telephoneField);
+        
+        JPanel bt = new JPanel();
+        JButton addButton = new JButton("Add Members");
+        addButton.addActionListener(e -> addMember());
+        bt.add(addButton);
 
         // Add components to the main frame
         setLayout(new BorderLayout());
         add(buttonPanel, BorderLayout.WEST);
         add(formPanel, BorderLayout.CENTER);
+        add(bt, BorderLayout.SOUTH);
        
 
-        addMemberButton.addActionListener(new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Retrieve the data from text fields
@@ -120,9 +137,12 @@ public class LibraryManagementUI extends JFrame {
                 String state = stateField.getText();
                 String zip = zipField.getText();
                 String telephone = telephoneField.getText();
+                Address a = new Address(street,city,state,zip);
 
                 // Perform the action (e.g., add new member)
-               // addMember(memberId, firstName, lastName, street, city, state, zip, telephone);
+                m.add(new LibraryMember(memberId,firstName,lastName,telephone,a) );
+                
+    
             }
         });
       //  formPanel.add(addMemberButton);
@@ -134,7 +154,15 @@ public class LibraryManagementUI extends JFrame {
 
     
 
-    public static void main(String[] args) {
+    private Object addMember() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+
+	public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new LibraryManagementUI().setVisible(true);
         });
