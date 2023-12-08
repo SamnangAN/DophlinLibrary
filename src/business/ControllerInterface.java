@@ -13,4 +13,5 @@ public interface ControllerInterface {
 	public List<String> allBookIds();
 	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException;
 	public HashMap<BookCopy, CheckoutRecordEntry> checkBookOverdue(String isbn) throws LibrarySystemException;
+	public void saveNewMember(LibraryMember mems);
 }

@@ -80,6 +80,11 @@ public class SystemController implements ControllerInterface {
 			}
 		}
 		return result; 		
+	}
+	@Override
+	public void saveNewMember(LibraryMember mems) {
+		DataAccess da = new DataAccessFacade();
+		da.saveNewMember(mems);
 	}	
 	
 }

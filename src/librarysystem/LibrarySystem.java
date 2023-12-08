@@ -1,19 +1,18 @@
 package librarysystem;
 
+import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.List;
+import java.awt.image.BufferedImage;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,9 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import business.ControllerInterface;
@@ -44,7 +41,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	LibrarySystem.INSTANCE,
 		LoginWindow.INSTANCE,
 		AllMemberIdsWindow.INSTANCE,	
-		AllBookIdsWindow.INSTANCE
+		AllBookIdsWindow.INSTANCE,
+		MainMenu.INSTANCE
 	};
     	
 	public static void hideAllWindows() {		
@@ -58,54 +56,37 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void init() {
     	setPathToImage();
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 800);
-        
-    	mainPanel = new JPanel() {
+
+    	setSize(900, 600);
+    	JPanel panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                // Load the background image
-                ImageIcon backgroundImage = new ImageIcon(pathToImage + "library.jpg");
+                ImageIcon backgroundImage = new ImageIcon(Util.getImagePath() + "library.jpg");
                 Image image = backgroundImage.getImage();
+                
                 g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
             }
         };
+        panel.setLayout(new BorderLayout());
+        JLabel centerLabel = new JLabel("Dolphin Library");
+        centerLabel.setForeground(Color.WHITE); 
+        centerLabel.setFont(new Font("Arial", Font.BOLD, 45));
+        panel.add(centerLabel, BorderLayout.CENTER);
         
-        mainPanel.setLayout(new BorderLayout());  
-        getContentPane().add(mainPanel);
-        setLocationRelativeTo(null); // Center the frame
-        showLoginPage();
-        createMenus();
-        isInitialized = true;
-    }
-    
-    public void initCardPanel() {
-    	cardPanel = new JPanel(new CardLayout());
-
-    //	cardPanel.add(new HomePanel(this), MENUS.HOME.getText());
-    //	cardPanel.add(CheckOutPanel.getInstance(), MenuType.CHECKOUT.getText());
-    //	cardPanel.add(OverDuePanel.getInstance(), MenuType.OVERDUE.getText());
-	//	cardPanel.add(BookPanel.getInstance(), MenuType.BOOK.getText());
-    //	cardPanel.add(LibraryMemberPanel.getInstance(), MenuType.MEMBER.getText());
-    	
-    	mainPanel.add(cardPanel, BorderLayout.CENTER);
-    }
-    
-    private void showLoginPage() {
-    	insertLibraryName();    
-
-        // Login button at the top right
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new LoginListener());
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setOpaque(false); // Make the button panel transparent
+        buttonPanel.setOpaque(false);
         buttonPanel.add(loginButton);
-        mainPanel.add(buttonPanel, BorderLayout.NORTH);
+        panel.add(buttonPanel, BorderLayout.NORTH);
 
-        // Set an empty border to center the content
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+
+        getContentPane().add(panel);
+        setLocationRelativeTo(null);
     }
     
     private void setPathToImage() {
@@ -137,7 +118,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	    return customMenu;	
 	}
     
-       
     class LoginListener implements ActionListener {
 
 		@Override
@@ -214,6 +194,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 //		}
 //    	
 //    }
+
 
 	@Override
 	public boolean isInitialized() {
