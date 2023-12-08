@@ -72,6 +72,7 @@ public class EditMemberInfoUI extends JFrame {
         JButton update = new JButton("Edit Members");
         bt.add(update);
         formPanel.add(update);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 50, 100));
         add(formPanel);
         
         update.addActionListener(new ActionListener() {

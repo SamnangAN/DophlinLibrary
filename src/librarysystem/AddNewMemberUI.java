@@ -83,7 +83,7 @@ public class AddNewMemberUI extends JFrame {
         // Create form on the right side with a background image
         JPanel formPanel = new JPanel() {
         };
-        formPanel.setLayout(new GridLayout(9, 2, 10, 5));  
+        formPanel.setLayout(new GridLayout(9, 3, 20, 5));  
 
         formPanel.add(new JLabel("Member ID:"));
         JTextField memberIdField = new JTextField();
@@ -173,7 +173,7 @@ public class AddNewMemberUI extends JFrame {
                 LibraryMember mems = new LibraryMember(memberId,firstName,lastName,telephone,a);
                 ci.saveNewMember(mems);
                
-                
+
                 showMessage("You have been added a member successfully");
                 Object[] rowData = {memberId,firstName, lastName,
                 		street, city,state,zip, telephone};
@@ -200,9 +200,6 @@ public class AddNewMemberUI extends JFrame {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
