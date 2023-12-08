@@ -45,6 +45,8 @@ public class LoginWindow extends JFrame implements LibWindow {
 
 	public void clear() {
 		messageBar.setText("");
+		username.setText("");
+		password.setText("");
 	}
 
 	private LoginWindow() {
@@ -81,7 +83,12 @@ public class LoginWindow extends JFrame implements LibWindow {
 		JButton loginButton = new JButton("Login");
 		addLoginButtonListener(loginButton);
 
-		gbc.gridx = 0;
+		formPanel.add(usernameLabel, getGb(gbc, 0,0));
+		formPanel.add(username, getGb(gbc, 1,0));
+		formPanel.add(passwordLabel, getGb(gbc, 0,1));
+		formPanel.add(password, getGb(gbc, 1,1));
+		formPanel.add(loginButton, getGb(gbc,1,2));
+	/*	gbc.gridx = 0;
 		gbc.gridy = 0;
 		formPanel.add(usernameLabel, gbc);
 
@@ -99,10 +106,16 @@ public class LoginWindow extends JFrame implements LibWindow {
 
 		gbc.gridx = 1;
 		gbc.gridy = 2;
-		formPanel.add(loginButton, gbc);
+		formPanel.add(loginButton, gbc);*/
 
 		formPanel.setBorder(BorderFactory.createEmptyBorder(0, 300, 0, 0));
 		return formPanel;
+	}
+	
+	private GridBagConstraints getGb(GridBagConstraints gbc, int gridX, int gridY) {
+		gbc.gridx = gridX;
+		gbc.gridy = gridY;
+		return gbc;
 	}
 	
 	private static class ImageBackgroundPanel extends JPanel {
