@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,9 +38,12 @@ public class CheckoutPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel topPanel, centerPanel;
+	private JPanel newCheckoutPanel, printCeckoutPanel, checkBookOverDue; 
 	private JTextField memberIdField;
 	private JTextField isbnField;
+	
 	private JTextField isbnOverDueField;
+	private JTextField printReportMemberIdField;
 	
 	private JTable resultTable;	
 	private final String[] headerNames = {"ISBN", "Title", "Copy number", "Library Member", "Checkout Date", "Due Date"};
@@ -60,10 +64,26 @@ public class CheckoutPanel extends JPanel {
 	
 	private void initTopPanel() {
 		// Create the JPanel
-		topPanel = new JPanel();
+		topPanel = new JPanel(new BorderLayout());
+		
+		newCheckoutPanel = getTitledPanel("New checkout");		
+		JPanel printCeckoutPanel = getTitledPanel("Print checkout for member");
+		JPanel checkBookOverDue = new JPanel();
+		checkBookOverDue.setBorder(BorderFactory.createTitledBorder("Check book overdue"));
+		
+		topPanel.add(newCheckoutPanel, BorderLayout.EAST);
+		topPanel.add(printCeckoutPanel, BorderLayout.CENTER);
+		topPanel.add(checkBookOverDue, BorderLayout.WEST);
+		
 		topPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		addCheckoutPanel();
 		addOverDuePanel();
+	}
+	
+	private JPanel getTitledPanel(String title) {
+		JPanel newPanel = new JPanel();
+		newPanel.setBorder(BorderFactory.createTitledBorder("New checkout"));	
+		return newPanel;
 	}
 	
 	

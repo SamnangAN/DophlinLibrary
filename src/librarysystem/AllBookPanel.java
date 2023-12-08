@@ -39,8 +39,8 @@ import business.ControllerInterface;
 import business.SystemController;
 
 
-public class AllBookIdsWindow extends JPanel {
-	private static AllBookIdsWindow INSTANCE;
+public class AllBookPanel extends JPanel {
+	private static AllBookPanel INSTANCE;
 	private static final long serialVersionUID = 1L;
 	private static final String CREATE_NEW_BOOK_LBL = "Add New Book";
     ControllerInterface ci = new SystemController();
@@ -52,14 +52,14 @@ public class AllBookIdsWindow extends JPanel {
     Vector<String> columnNames = new Vector<>();
     JPanel backgroundPanelMain, backgroundPanelAddNewMember;
 
-    public static AllBookIdsWindow getInstance() {
+    public static AllBookPanel getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new AllBookIdsWindow();
+			INSTANCE = new AllBookPanel();
 		}
 		return INSTANCE;
 	}
     
-    public AllBookIdsWindow() {
+    public AllBookPanel() {
     	init();
 	}
 
@@ -74,7 +74,7 @@ public class AllBookIdsWindow extends JPanel {
 		backgroundPanelMain.add(menuLink, BorderLayout.NORTH);
 		backgroundPanelMain.add(formPanel,BorderLayout.CENTER);
 		
-		backgroundPanelAddNewMember = AddBook.getInstance().init();
+		backgroundPanelAddNewMember = AddBookPanel.getInstance().init();
 		backgroundPanelAddNewMember.setVisible(false);
 
 		add(backgroundPanelMain);
@@ -258,7 +258,7 @@ public class AllBookIdsWindow extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			backgroundPanelMain.setVisible(false);
 			backgroundPanelAddNewMember.setVisible(true);
-			AddBook.getInstance().prepareData();
+			AddBookPanel.getInstance().prepareData();
 		}
 
     }

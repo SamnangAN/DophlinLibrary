@@ -36,8 +36,8 @@ import business.ControllerInterface;
 import business.SystemController;
 
 
-public class AddBook extends JPanel {
-	private static AddBook INSTANCE;
+public class AddBookPanel extends JPanel {
+	private static AddBookPanel INSTANCE;
 	
 	protected static final String BACK_LBL = "> Back";
 	private JTextField isbnTxtField;
@@ -62,12 +62,12 @@ public class AddBook extends JPanel {
 	private JTextField firstNameField, lastNameField, streetField, cityField, stateField, zipField, telephoneField,bioField;
 	private ControllerInterface ci = new SystemController();
 
-	public AddBook() {
+	public AddBookPanel() {
 	}
 	
-	public static AddBook getInstance() {
+	public static AddBookPanel getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new AddBook();
+			INSTANCE = new AddBookPanel();
 		}
 		return INSTANCE;
 	}
@@ -282,7 +282,7 @@ public class AddBook extends JPanel {
 			book.setTitle(titleTxtField.getText());
 			book.setCopies(Integer.parseInt(numberOfCopyTxtField.getText()));
 			ci.saveBook(book);
-			AllBookIdsWindow.getInstance().performFitler();
+			AllBookPanel.getInstance().performFitler();
 			new CancelBookActionListener().actionPerformed(e);
 		}
 
@@ -294,13 +294,13 @@ public class AddBook extends JPanel {
 			String isbn = isbnTxtField.getText();
 			Book book = ci.searchBook(isbn);
 			if(book != null) {
-				AllBookIdsWindow.getInstance().openPopupForm(isbn);
+				AllBookPanel.getInstance().openPopupForm(isbn);
 			}
 			book.setMaxCheckoutLength(Integer.parseInt(maximunCheckoutTxtField.getText()));
 			book.setTitle(titleTxtField.getText());
 			book.setCopies(Integer.parseInt(numberOfCopyTxtField.getText()));
 			ci.saveBook(book);
-			AllBookIdsWindow.getInstance().performFitler();
+			AllBookPanel.getInstance().performFitler();
 			new CancelBookActionListener().actionPerformed(e);
 		}
 
@@ -309,8 +309,8 @@ public class AddBook extends JPanel {
 	class CancelBookActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			AllBookIdsWindow.getInstance().backgroundPanelMain.setVisible(true);
-			AllBookIdsWindow.getInstance().backgroundPanelAddNewMember.setVisible(false);
+			AllBookPanel.getInstance().backgroundPanelMain.setVisible(true);
+			AllBookPanel.getInstance().backgroundPanelAddNewMember.setVisible(false);
 		}
 
     }

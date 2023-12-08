@@ -114,8 +114,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
     		mainPanel = new JPanel();
     		cardPanel = new JPanel(new CardLayout());    	
 	    	cardPanel.add(CheckoutPanel.getInstance(), MENUS.CHECKOUTS.getText());
-	    	cardPanel.add(AllBookIdsWindow.getInstance(), MENUS.BOOKS.getText());
-			cardPanel.add(AddNewMember.getInstance(), MENUS.MEMBERS.getText());    	
+	    	cardPanel.add(AllBookPanel.getInstance(), MENUS.BOOKS.getText());
+			cardPanel.add(AddNewMemberPanel.getInstance(), MENUS.MEMBERS.getText());    	
 	    	mainPanel.add(cardPanel, BorderLayout.CENTER);
 	    	landscapePanel.setVisible(false);
 	    	LoginWindow.INSTANCE.setVisible(false);

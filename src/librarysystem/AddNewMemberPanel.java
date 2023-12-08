@@ -2,7 +2,8 @@ package librarysystem;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +15,6 @@ import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -31,16 +31,27 @@ import business.SystemController;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 
-public class AddNewMember extends JPanel{
-	private static AddNewMember INSTANCE;
+public class AddNewMemberPanel extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -223504918808742781L;
+	private static AddNewMemberPanel INSTANCE;
 	private JTextField memberIdField, firstNameField, lastNameField, streetField, cityField, stateField, zipField, telephoneField;
 	ControllerInterface ci = new SystemController();
 	DefaultTableModel modelRight = new DefaultTableModel();
-	 public AddNewMember() {
+	 public AddNewMemberPanel() {
 	        // Set up the main frame properties
-		 	JPanel titledPanel = new JPanel();
-	        titledPanel.setBorder(BorderFactory.createTitledBorder("My Titled Panel"));
+		 /*	JPanel titledPanel = new JPanel(new BorderLayout());
+		 	JLabel jLabel = new JLabel("Create new member");
+	        jLabel.setFont(new Font("Arial", Font.BOLD,22));
+	        jLabel.setOpaque(false);
+	        titledPanel.add(jLabel,BorderLayout.NORTH);*/
+		 	
+	        //titledPanel.setBorder(BorderFactory.createTitledBorder("Create new member"));
+	        
 	        JPanel mainPanel = new JPanel();
+	    //    titledPanel.add(mainPanel);
 	        mainPanel.setLayout(new GridLayout(9, 2, 10, 5));
 	        mainPanel.add(new JLabel("Member ID:"));
 	        memberIdField = new JTextField();
@@ -109,6 +120,7 @@ public class AddNewMember extends JPanel{
             
             JTable memberTable = new JTable(modelRight);
 	        JScrollPane tableScrollPane = new JScrollPane(memberTable);
+	        mainPanel.add(new JLabel("All members: "));
 	        add(memberTable, BorderLayout.SOUTH);
 	        
 	        
@@ -200,13 +212,13 @@ public class AddNewMember extends JPanel{
 
 	    public static void main(String[] args) {
 	        SwingUtilities.invokeLater(() -> {
-	            new AddNewMember().setVisible(true);
+	            new AddNewMemberPanel().setVisible(true);
 	        });
 	    }
 	    public static Component getInstance() {
 			// TODO Auto-generated method stub
 			if (INSTANCE == null) {
-				INSTANCE = new AddNewMember();
+				INSTANCE = new AddNewMemberPanel();
 			}
 			return INSTANCE;
 		}

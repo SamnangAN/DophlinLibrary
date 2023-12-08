@@ -86,12 +86,7 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		LibraryMember member = da.searchMember(memberId);
 		if(member == null) {
-			throw new LibrarySystemException("Given Member ID does not exist!	@Override\r\n"
-					+ "	public List<CheckoutRecordEntry> allCheckoutEntries() {\r\n"
-					+ "		// TODO Auto-generated method stub\r\n"
-					+ "		return null;\r\n"
-					+ "	}\r\n"
-					+ "	");
+			throw new LibrarySystemException("Given Member ID does not exist");
 		}
 		Book book = da.searchBook(isbn);
 		if(book == null || !book.isAvailable()) {
@@ -170,5 +165,15 @@ public class SystemController implements ControllerInterface {
 			re.add(new CheckoutRecord(m));
 		}
 		return re;
+	}
+
+	@Override
+	public List<CheckoutRecordEntry> getMemberCheckoutEntries(String memberId) throws LibrarySystemException {
+		DataAccess da = new DataAccessFacade();
+		LibraryMember member = da.searchMember(memberId);
+		if(member == null) {
+			throw new LibrarySystemException("Given Member ID does not exist");
+		}
+		return member.getCheckoutRecord().getCheckoutRecordEntries();
 	}
 }
