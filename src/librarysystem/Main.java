@@ -20,8 +20,6 @@ public class Main {
 	            LibrarySystem.INSTANCE.init();
 	            centerFrameOnDesktop(LibrarySystem.INSTANCE);
 	            LibrarySystem.INSTANCE.setVisible(true);
-
-	        	
 	         });
 	   }
 	   

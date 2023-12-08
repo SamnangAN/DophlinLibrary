@@ -154,9 +154,9 @@ public class MainMenu extends JFrame implements LibWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			LibrarySystem.hideAllWindows();
-			AddBook.INSTANCE.init();
-			Util.centerFrameOnDesktop(AddBook.INSTANCE);
-			AddBook.INSTANCE.setVisible(true);
+			AllBookIdsWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(AllBookIdsWindow.INSTANCE);
+			AllBookIdsWindow.INSTANCE.setVisible(true);
 			
 		}
     	
