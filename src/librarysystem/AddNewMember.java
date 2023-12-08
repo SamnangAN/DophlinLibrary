@@ -12,13 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class AddNewMember extends JFrame{
+public class AddNewMember extends JPanel{
 	private JTextField memberIdField, firstNameField, lastNameField, streetField, cityField, stateField, zipField, telephoneField;
 	 public AddNewMember() {
 	        // Set up the main frame properties
-	        setTitle("Library Management System");
+	        /*setTitle("Library Management System");
 	        setSize(400, 300);
-	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
 
 	     // Create and set up the main panel
 	        JPanel mainPanel = new JPanel();

@@ -14,7 +14,6 @@ public class Main {
 	      EventQueue.invokeLater(() -> 
 	         {
 	            LibrarySystem.INSTANCE.setTitle("Doplhin Library Application");
-	            LibrarySystem.INSTANCE.setTitle("Sample Library Application");
 	            LibrarySystem.INSTANCE.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	            
 	            LibrarySystem.INSTANCE.init();

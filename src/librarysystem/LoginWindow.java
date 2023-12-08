@@ -167,7 +167,11 @@ public class LoginWindow extends JFrame implements LibWindow {
     				
     				systemController.login(username.getText().toString(), password.getText().toString());
     				
-					if (SystemController.currentAuth == Auth.BOTH) {
+					if (SystemController.currentAuth != null) {
+						LibrarySystem.INSTANCE.setLoggedIn(true);
+						LibrarySystem.INSTANCE.setVisible(true);
+						/* Auth.BOTH) {
+						LibrarySystem.INSTANCE.setLoggedIn(true);
 						LibrarySystem.hideAllWindows();
 						MainMenu.INSTANCE.init();
 						Util.centerFrameOnDesktop(MainMenu.INSTANCE);
@@ -177,7 +181,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 						LibrarySystem.hideAllWindows();
 						MiniMenu.INSTANCE.init();
 						Util.centerFrameOnDesktop(MiniMenu.INSTANCE);
-						MiniMenu.INSTANCE.setVisible(true);
+						MiniMenu.INSTANCE.setVisible(true);*/
 					}
 					else {
 						JOptionPane.showMessageDialog(this,"Username or Password mismatch!");

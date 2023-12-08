@@ -15,7 +15,8 @@ enum MENUS {
 	HOME("Home", Util.getImagePath()+"menu_home.png"), 
 	BOOKS("Books", Util.getImagePath()+"menu_books.png"), 
 	CHECKOUTS("Check Outs", Util.getImagePath()+"menu_checkouts.png"), 
-	MEMBERS("Members", Util.getImagePath()+"menu_members.png");
+	MEMBERS("Members", Util.getImagePath()+"menu_members.png"),
+	LOGOUT("Logout", Util.getImagePath()+"menu_logout.png");
 
 	private String text;
 	private String iconName;

@@ -36,14 +36,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 
-public class AddNewMemberUI extends JFrame {
+public class AddNewMemberUI extends JPanel {
+	
+	private static AddNewMemberUI INSTANCE;
 	
 	ControllerInterface ci = new SystemController();
 	
 	DataAccessFacade ac = new DataAccessFacade();
 //	ArrayList<LibraryMember> m = new ArrayList<LibraryMember>();
     public AddNewMemberUI() {   	
-        setTitle("Library Management System");
+       // setTitle("Library Management System");
         setSize(2000, 1000);
        
         setLayout(new BorderLayout());
@@ -55,7 +57,7 @@ public class AddNewMemberUI extends JFrame {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         }, BorderLayout.CENTER);
-        getRootPane().setBorder(BorderFactory.createEmptyBorder(70, 50, 20, 50)); // top, left, bottom, right
+     //   getRootPane().setBorder(BorderFactory.createEmptyBorder(70, 50, 20, 50)); // top, left, bottom, right
 
         // Create buttons on the left side
         JPanel buttonPanel = new JPanel();
@@ -202,6 +204,12 @@ public class AddNewMemberUI extends JFrame {
 	}
 
 
+    public static AddNewMemberUI getInstance() {
+    	if (INSTANCE == null) {
+    		INSTANCE = new AddNewMemberUI();
+    	}
+    	return INSTANCE;
+    }
 
 
 	public static void main(String[] args) {

@@ -12,27 +12,15 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class CheckoutBookWindow extends JFrame implements LibWindow {
-
+public class CheckoutPanel extends JPanel {
+	private static CheckoutPanel INSTANCE;
 	private static final long serialVersionUID = 1L;
-	private JPanel mainPanel;
+
 
 	private JTextField memberIdField;
 	private JTextField isbnField;
 
-	public CheckoutBookWindow() {
-		
-		// Set up the JFrame
-		setTitle("Checkout Form");
-		setSize(400, 200);
-		setLocationRelativeTo(null);
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		mainPanel = new JPanel();
-		mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-		setContentPane(mainPanel);
+	public CheckoutPanel() {
 		
 		
 
@@ -69,43 +57,16 @@ public class CheckoutBookWindow extends JFrame implements LibWindow {
 		// Add the panel to the JFrame
 		add(panel);
 
-		// Display the JFrame
-		setVisible(true);
 	}
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CheckoutBookWindow frame = new CheckoutBookWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public static CheckoutPanel getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new CheckoutPanel();
+		}
+		return INSTANCE;
 	}
 
 
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isInitialized() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void isInitialized(boolean val) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 }

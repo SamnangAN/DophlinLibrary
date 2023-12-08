@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EditMemberInfoUI extends JFrame {
+public class EditMemberInfoUI extends JPanel {
 
     private JTextField memberIdField;
     private JTextField firstNameField;
@@ -24,9 +24,9 @@ public class EditMemberInfoUI extends JFrame {
     private JTextField telephoneField;
 
     public EditMemberInfoUI() {
-        setTitle("Edit Member Info");
+     /*   setTitle("Edit Member Info");
         setSize(1000, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
         setVisible(true);
         
         

@@ -48,7 +48,9 @@ import librarysystem.AllBookIdsWindow.AddNewBookActionListener;
 import javax.swing.JOptionPane;
 
 
-public class AddBook extends JFrame implements LibWindow {
+public class AddBook extends JPanel implements LibWindow {
+	private static AddBook INSTANCE;
+	
 	protected static final String BACK_LBL = "> Back";
 	private JTextField isbnTxtField;
 	private JTextField titleTxtField;
@@ -74,9 +76,16 @@ public class AddBook extends JFrame implements LibWindow {
 
 	public AddBook() {
 	}
+	
+	public static AddBook getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new AddBook();
+		}
+		return INSTANCE;
+	}
 
 	public void init() {
-		setTitle("Add New Book");
+		//setTitle("Add New Book");
 		setSize(1200, 800);
 
 		ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel(Util.getImagePath() + "login-background.png");
@@ -88,8 +97,8 @@ public class AddBook extends JFrame implements LibWindow {
 		backgroundPanel.add(menuLink, BorderLayout.WEST);
 		backgroundPanel.add(formPanel,BorderLayout.CENTER);
 
-		getContentPane().add(backgroundPanel);
-		setLocationRelativeTo(null);
+		add(backgroundPanel);
+		//setLocationRelativeTo(null);
 
 	}
 	
