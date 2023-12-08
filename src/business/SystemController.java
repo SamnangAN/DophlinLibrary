@@ -78,11 +78,14 @@ public class SystemController implements ControllerInterface {
 		return da.addNewCopy(isbn, input);		
 	}
 	@Override
-	public List<CheckoutRecordEntry> allCheckoutEntries() {
+	public List<CheckoutRecordEntry> getAllCheckoutEntries() {
 		DataAccess da = new DataAccessFacade();
 		List<CheckoutRecordEntry> allEntries = new ArrayList<CheckoutRecordEntry>();
 		for (LibraryMember member: da.readMemberMap().values()) {
-			allEntries.addAll(member.getCheckoutRecord().getCheckoutRecordEntries());
+			System.out.println("member checkoutRecord: " + member.getCheckoutRecord());
+			if (member.getCheckoutRecord() != null && member.getCheckoutRecord().getCheckoutRecordEntries() != null) {
+				allEntries.addAll(member.getCheckoutRecord().getCheckoutRecordEntries());
+			}
 		}
 		return allEntries;
 	}
