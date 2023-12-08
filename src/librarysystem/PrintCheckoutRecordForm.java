@@ -14,7 +14,9 @@ import javax.swing.table.DefaultTableModel;
 import business.Book;
 import business.CheckoutRecord;
 import business.CheckoutRecordEntry;
+import business.ControllerInterface;
 import business.LibraryMember;
+import business.SystemController;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 
@@ -22,16 +24,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PrintCheckoutRecordForm extends JFrame {
+public class PrintCheckoutRecordForm extends JPanel {
 
     private JTextField memberIdField;
     private JTable checkoutTable;
     DefaultTableModel modelRight = new DefaultTableModel();
+    static PrintCheckoutRecordForm INSTANCE;
 
     public PrintCheckoutRecordForm() {
-        setTitle("Print Checkout Records");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         createUI();
 
@@ -61,8 +62,9 @@ public class PrintCheckoutRecordForm extends JFrame {
         modelRight.addColumn("IBN");
         modelRight.addColumn("CheckoutDate");
         modelRight.addColumn("DueDate");
-        DataAccess access = new DataAccessFacade();
-        List<CheckoutRecord> recs = access.getAllCheckoutRecord();
+      //  DataAccess access = new DataAccessFacade();
+        ControllerInterface ci = new SystemController();
+        List<CheckoutRecord> recs = ci.getAllCheckoutRecord();
               for (CheckoutRecord rc : recs) {
             	  List<CheckoutRecordEntry> entr = rc.getCheckoutRecordEntries();
             	  for(CheckoutRecordEntry ent:entr) {
@@ -116,7 +118,13 @@ public class PrintCheckoutRecordForm extends JFrame {
            }
         
     }
-
+    public static Component getInstance() {
+		// TODO Auto-generated method stub
+		if (INSTANCE == null) {
+			INSTANCE = new PrintCheckoutRecordForm();
+		}
+		return INSTANCE;
+	}
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override

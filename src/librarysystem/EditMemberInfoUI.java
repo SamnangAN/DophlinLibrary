@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EditMemberInfoUI extends JFrame {
+public class EditMemberInfoUI extends JPanel {
 
     private JTextField memberIdField;
     private JTextField firstNameField;
@@ -22,11 +22,11 @@ public class EditMemberInfoUI extends JFrame {
     private JTextField stateField;
     private JTextField zipField;
     private JTextField telephoneField;
-
-    public EditMemberInfoUI() {
-        setTitle("Edit Member Info");
+    static EditMemberInfoUI INSTANCE;
+    static String memberId;
+    public EditMemberInfoUI(String memberId) {
+    	this.memberId = memberId;
         setSize(1000, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         
         
@@ -78,8 +78,7 @@ public class EditMemberInfoUI extends JFrame {
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateAndSave()) {
-                 //   JOptionPane.showMessageDialog(EditMemberInfoUI.this, "Member info updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                if (validateAndSave()) {             
                     clearFields();
                 }
             }
@@ -116,9 +115,6 @@ public class EditMemberInfoUI extends JFrame {
         }else {
         	 JOptionPane.showMessageDialog(this, "Member with this ID cannot be found", "Failed", JOptionPane.INFORMATION_MESSAGE);
         }
-        // Perform additional validation logic if needed
-
-        // For simplicity, let's assume validation always passes in this example
         return true;
     }
 
@@ -133,11 +129,18 @@ public class EditMemberInfoUI extends JFrame {
         telephoneField.setText("");
     }
 
+    public static Component getInstance() {
+		// TODO Auto-generated method stub
+		if (INSTANCE == null) {
+			INSTANCE = new EditMemberInfoUI(memberId);
+		}
+		return INSTANCE;
+	}
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new EditMemberInfoUI().setVisible(true);;
+                new EditMemberInfoUI(memberId).setVisible(true);;
             }
         });
     }

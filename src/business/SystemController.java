@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import dataaccess.Auth;
 import dataaccess.DataAccess;
@@ -86,5 +87,22 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		da.saveNewMember(mems);
 	}	
+	
+	public CheckoutRecord getCheckoutRecord(String memberID) {
+		DataAccess da = new DataAccessFacade();	
+		LibraryMember mb = da.searchMember(memberID);
+		CheckoutRecord rc = new CheckoutRecord(mb);
+		return rc;
+	}
+	public List<CheckoutRecord> getAllCheckoutRecord() {
+		DataAccess da = new DataAccessFacade();	
+		List<CheckoutRecord> re = new ArrayList<>();
+		HashMap<String, LibraryMember> us = da.readMemberMap();
+		List<LibraryMember> mems = us.values().stream().collect(Collectors.toList());
+		for(LibraryMember m:mems) {
+			re.add(new CheckoutRecord(m));
+		}
+		return re;
+	}
 	
 }

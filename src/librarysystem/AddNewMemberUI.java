@@ -55,7 +55,7 @@ public class AddNewMemberUI extends JPanel {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         }, BorderLayout.CENTER);
-        getRootPane().setBorder(BorderFactory.createEmptyBorder(70, 50, 20, 50)); // top, left, bottom, right
+        setBorder(BorderFactory.createEmptyBorder(70, 50, 20, 50)); // top, left, bottom, right
 
         // Create form on the right side with a background image
         JPanel formPanel = new JPanel() {
@@ -135,25 +135,26 @@ public class AddNewMemberUI extends JPanel {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Retrieve the data from text fields
-                String memberId = memberIdField.getText();
-                String firstName = firstNameField.getText();
-                String lastName = lastNameField.getText();
-                String street = streetField.getText();
-                String city = cityField.getText();
-                String state = stateField.getText();
-                String zip = zipField.getText();
-                String telephone = telephoneField.getText();
-                Address a = new Address(street,city,state,zip);
+ 	                // Retrieve the data from text fields
+ 	                String memberId = memberIdField.getText();
+ 	                String firstName = firstNameField.getText();
+ 	                String lastName = lastNameField.getText();
+ 	                String street = streetField.getText();
+ 	                String city = cityField.getText();
+ 	                String state = stateField.getText();
+ 	                String zip = zipField.getText();
+ 	                String telephone = telephoneField.getText();
+ 	                Address a = new Address(street,city,state,zip);
 
-                LibraryMember mems = new LibraryMember(memberId,firstName,lastName,telephone,a);
-                ci.saveNewMember(mems);
-               
-
-                showMessage("You have been added a member successfully");
-                Object[] rowData = {memberId,firstName, lastName,
-                		street, city,state,zip, telephone};
-                modelRight.addRow(rowData);
+ 	                LibraryMember mems = new LibraryMember(memberId,firstName,lastName,telephone,a);
+ 	                ci.saveNewMember(mems);
+ 	            
+ 	               
+ 	                showMessage("You have been added a member successfully");
+ 	                
+ 	                Object[] rowData = {memberId,firstName, lastName,
+ 	                		street, city,state,zip, telephone};
+ 	                modelRight.addRow(rowData);
                 
     
             }
@@ -171,6 +172,7 @@ public class AddNewMemberUI extends JPanel {
         });
     }
     
+
 
     private Object addMember() {
 		// TODO Auto-generated method stub
@@ -190,5 +192,3 @@ public class AddNewMemberUI extends JPanel {
 		return INSTANCE;
 	}
 }
-
-
