@@ -3,10 +3,6 @@ package business;
 import java.util.HashMap;
 import java.util.List;
 
-import business.Book;
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFacade;
-
 public interface ControllerInterface {
 	public void addNewBookCopy(String isbn, int numberOfCopy);
 	public HashMap<String, Book> readBooksMap();
@@ -19,8 +15,8 @@ public interface ControllerInterface {
 	public void saveNewMember(LibraryMember mems);
 	public CheckoutRecord getCheckoutRecord(String memberID);
 	public List<CheckoutRecord> getAllCheckoutRecord();
-	public List<CheckoutRecordEntry> allCheckoutEntries();
 	public Book searchBook(String isbn);
 	public List<Book> searchBook(String isbn,String title);
+	public List<CheckoutRecordEntry> getAllCheckoutEntries();
 	
 }
