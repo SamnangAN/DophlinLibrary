@@ -198,4 +198,18 @@ public class DataAccessFacade implements DataAccess {
 		private static final long serialVersionUID = 5399827794066637059L;
 	}
 	
+	public HashMap<String,Book> addNewCopy(String isbn, String input) {
+		Book b = searchBook(isbn);
+		b.addCopy();
+    	int numberOfCopy = Integer.parseInt(input);
+    	while(numberOfCopy>1) {
+    		b.addCopy();
+    		numberOfCopy -= 1;
+    	}
+    	HashMap<String,Book> allBooks = readBooksMap();
+    	allBooks.put(isbn,b);
+    	saveToStorage(StorageType.BOOKS, allBooks);
+    	return allBooks;
+    }
+	
 }

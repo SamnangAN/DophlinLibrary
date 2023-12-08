@@ -17,5 +17,5 @@ public interface DataAccess {
 	public LibraryMember searchMember(String memberId);
 	public Book searchBook(String isbn);
 	List<Book> searchBook(String isbn, String title);
-	
+	HashMap<String,Book> addNewCopy(String isbn, String input);
 }
