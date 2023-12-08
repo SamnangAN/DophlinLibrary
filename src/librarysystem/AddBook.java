@@ -2,15 +2,12 @@ package librarysystem;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,36 +16,27 @@ import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import business.Address;
 import business.Author;
 import business.Book;
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFacade;
-import librarysystem.AllBookIdsWindow.AddNewBookActionListener;
-
-import javax.swing.JOptionPane;
+import business.ControllerInterface;
+import business.SystemController;
 
 
-public class AddBook extends JPanel implements LibWindow {
+public class AddBook extends JPanel {
 	private static AddBook INSTANCE;
 	
 	protected static final String BACK_LBL = "> Back";
@@ -72,7 +60,7 @@ public class AddBook extends JPanel implements LibWindow {
 	private Vector<String> columnNames = new Vector<>();
 	private Book book = new Book();
 	private JTextField firstNameField, lastNameField, streetField, cityField, stateField, zipField, telephoneField,bioField;
-	private DataAccess dataAccess = new DataAccessFacade();
+	private ControllerInterface ci = new SystemController();
 
 	public AddBook() {
 	}
@@ -83,22 +71,25 @@ public class AddBook extends JPanel implements LibWindow {
 		}
 		return INSTANCE;
 	}
+	
+	public void prepareData() {
+    	book.resetAuthor();
+    	isbnTxtField.setText("");
+    	titleTxtField.setText("");
+    	maximunCheckoutTxtField.setText("");
+    	numberOfCopyTxtField.setText("");
+    	reloadTableForm();
+    }
 
-	public void init() {
-		//setTitle("Add New Book");
-		setSize(1200, 800);
-
-		ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel(Util.getImagePath() + "login-background.png");
+	public JPanel init() {
+		JPanel backgroundPanel = new JPanel();
 		backgroundPanel.setLayout(new BorderLayout());
 		JPanel formPanel = createBookForm();
 		JPanel menuLink = createMenuLink();
 
 		backgroundPanel.setLayout(new BorderLayout());
-		backgroundPanel.add(menuLink, BorderLayout.WEST);
 		backgroundPanel.add(formPanel,BorderLayout.CENTER);
-
-		add(backgroundPanel);
-		//setLocationRelativeTo(null);
+		return backgroundPanel;
 
 	}
 	
@@ -111,10 +102,10 @@ public class AddBook extends JPanel implements LibWindow {
         linkButton.setContentAreaFilled(false);
         linkButton.setFocusPainted(false);
         addHoverUnderlineText(linkButton);
-        linkButton.addActionListener(new BackActionListener());
+        linkButton.addActionListener(new CancelBookActionListener());
         leftPanel.add(linkButton);
         leftPanel.setOpaque(false);
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 380));
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20,10));
         return leftPanel;
 	}
 	
@@ -145,6 +136,10 @@ public class AddBook extends JPanel implements LibWindow {
 		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JButton saveButton = new JButton("Add");
 		saveButton.addActionListener(new SaveBookActionListener());
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(new CancelBookActionListener());
+		
+		bottomPanel.add(cancelButton);
 		bottomPanel.add(saveButton);
 		
 		form.add(topPanel,BorderLayout.NORTH);
@@ -187,6 +182,7 @@ public class AddBook extends JPanel implements LibWindow {
 
 		JLabel isbnLbl = new JLabel("ISBN:");
 		isbnTxtField = new JTextField(15);
+		isbnTxtField.addActionListener(new CheckExitingIsbnActionListener());
 
 		JLabel titleLbl = new JLabel("Title:");
 		titleTxtField = new JTextField(15);
@@ -242,14 +238,15 @@ public class AddBook extends JPanel implements LibWindow {
 		Vector<Vector<Object>> authorList = covertToTableData(authors);
 		tableModel = new DefaultTableModel();
 		tableModel.setDataVector(authorList, columnNames);
+		
 
         table = new JTable(tableModel);
+        table.setPreferredScrollableViewportSize(new Dimension(1000,200));
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
 	}
 	
 	private void reloadTableForm() {
-		DataAccessFacade dataAccess = new DataAccessFacade();
 		List<Author> authors =  book.getAuthors();
 		Vector<Vector<Object>> authorList = covertToTableData(authors);
 		tableModel.setDataVector(authorList, columnNames);
@@ -284,20 +281,36 @@ public class AddBook extends JPanel implements LibWindow {
 			book.setMaxCheckoutLength(Integer.parseInt(maximunCheckoutTxtField.getText()));
 			book.setTitle(titleTxtField.getText());
 			book.setCopies(Integer.parseInt(numberOfCopyTxtField.getText()));
-			dataAccess.saveBook(book);
-			new BackActionListener().actionPerformed(e);
+			ci.saveBook(book);
+			AllBookIdsWindow.getInstance().performFitler();
+			new CancelBookActionListener().actionPerformed(e);
 		}
 
     }
 	
-	class BackActionListener implements ActionListener {
+	class CheckExitingIsbnActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			LibrarySystem.hideAllWindows();
-			setVisible(false);
-			AllBookIdsWindow.getInstance().init();
-			Util.centerFrameOnDesktop(AllBookIdsWindow.getInstance());
-			AllBookIdsWindow.getInstance().setVisible(true);
+			String isbn = isbnTxtField.getText();
+			Book book = ci.searchBook(isbn);
+			if(book != null) {
+				AllBookIdsWindow.getInstance().openPopupForm(isbn);
+			}
+			book.setMaxCheckoutLength(Integer.parseInt(maximunCheckoutTxtField.getText()));
+			book.setTitle(titleTxtField.getText());
+			book.setCopies(Integer.parseInt(numberOfCopyTxtField.getText()));
+			ci.saveBook(book);
+			AllBookIdsWindow.getInstance().performFitler();
+			new CancelBookActionListener().actionPerformed(e);
+		}
+
+    }
+	
+	class CancelBookActionListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			AllBookIdsWindow.getInstance().backgroundPanelMain.setVisible(true);
+			AllBookIdsWindow.getInstance().backgroundPanelAddNewMember.setVisible(false);
 		}
 
     }
@@ -365,7 +378,6 @@ public class AddBook extends JPanel implements LibWindow {
 					String bio=bioField.getText();
 					Author author = new Author(firstName, lastName, telephone, address, bio);
                 	book.addAuthor(author);
-                	dataAccess.saveBook(book);
                 	reloadTableForm();
                     JOptionPane.showMessageDialog(dialog, "New Author is saved");
                     dialog.dispose();

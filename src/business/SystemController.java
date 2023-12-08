@@ -28,6 +28,59 @@ public class SystemController implements ControllerInterface {
 		
 	}
 	
+	public void addNewBookCopy(String isbn,int numberOfCopy) {
+		DataAccess da = new DataAccessFacade();
+		Book b = da.searchBook(isbn);
+		b.addCopy();
+    	while(numberOfCopy>1) {
+    		b.addCopy();
+    		numberOfCopy -= 1;
+    	}
+    	da.addNewCopy(b);
+    }
+	@Override
+	public HashMap<String, Book> readBooksMap() {
+		DataAccess da = new DataAccessFacade();
+		return da.readBooksMap();
+	}
+	
+	@Override
+	public Book searchBook(String isbn) {
+		DataAccess da = new DataAccessFacade();
+		return da.searchBook(isbn);
+	}
+	@Override
+	public List<Book> searchBook(String isbn, String title) {
+		HashMap<String,Book> bookMap = readBooksMap();
+		return bookMap.values().stream()
+		.filter(book -> filterBooks(book,isbn,title))
+		.collect(Collectors.toList());
+	}
+	@Override
+	public void saveBook(Book book) {
+		new DataAccessFacade().saveBook(book);
+	}
+	
+	private boolean filterBooks(Book book, String isbn, String title) {
+		boolean matchIsbn = false;
+		boolean matchTitle = false;
+		if(isbn != null && !isbn.isEmpty()) {
+			if(book.getIsbn().toLowerCase().contains(isbn.toLowerCase())) {
+				matchIsbn = true;
+			}
+		}else {
+			matchIsbn = true;
+		}
+		if(title != null && !title.isEmpty()) {
+			if(book.getTitle().toLowerCase().contains(title.toLowerCase())) {
+				matchTitle = true;
+			}
+		}else {
+			matchTitle = true;
+		}
+		return matchIsbn && matchTitle;
+	}
+	
 	@Override
 	public CheckoutRecordEntry checkoutBook(String memberId, String isbn) throws LibrarySystemException{
 		DataAccess da = new DataAccessFacade();
@@ -73,11 +126,7 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		da.saveNewMember(mems);
 	}
-	@Override
-	public HashMap<String, Book> addNewCopy(String isbn, String input) {
-		DataAccess da = new DataAccessFacade();
-		return da.addNewCopy(isbn, input);		
-	}
+	
 	@Override
 	public List<CheckoutRecordEntry> getAllCheckoutEntries() {
 		DataAccess da = new DataAccessFacade();

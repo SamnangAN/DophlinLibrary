@@ -142,6 +142,11 @@ final public class Book implements Serializable {
 		authors.add(author);
 	}
 
+	public void resetAuthor() {
+		authors = new ArrayList<Author>();
+		
+	}
+
 	
 	
 	
