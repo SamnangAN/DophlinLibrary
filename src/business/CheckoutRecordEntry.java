@@ -10,11 +10,13 @@ public final class CheckoutRecordEntry  implements Serializable{
 	private BookCopy bookCopy;
 	private LocalDate checkoutDate;
 	private LocalDate dueDate;
+	private CheckoutRecord checkoutRecord;
 	
-	public CheckoutRecordEntry(BookCopy bookCopy, LocalDate checkoutDate, LocalDate dueDate) {
+	public CheckoutRecordEntry(BookCopy bookCopy, LocalDate checkoutDate, LocalDate dueDate, CheckoutRecord checkoutRecord) {
 		this.bookCopy = bookCopy;
 		this.checkoutDate = checkoutDate;
 		this.dueDate = dueDate;
+		this.setCheckoutRecord(checkoutRecord);
 	}
 	
 	public BookCopy getBookCopy() {
@@ -39,6 +41,14 @@ public final class CheckoutRecordEntry  implements Serializable{
 	
 	public boolean isOverDue() {
 		return dueDate.isBefore(LocalDate.now()) && !bookCopy.isAvailable();
+	}
+
+	public CheckoutRecord getCheckoutRecord() {
+		return checkoutRecord;
+	}
+
+	public void setCheckoutRecord(CheckoutRecord checkoutRecord) {
+		this.checkoutRecord = checkoutRecord;
 	}
 
 }

@@ -26,24 +26,9 @@ public class SystemController implements ControllerInterface {
 		currentAuth = map.get(id).getAuthorization();
 		
 	}
-	@Override
-	public List<String> allMemberIds() {
-		DataAccess da = new DataAccessFacade();
-		List<String> retval = new ArrayList<>();
-		retval.addAll(da.readMemberMap().keySet());
-		return retval;
-	}
 	
 	@Override
-	public List<String> allBookIds() {
-		DataAccess da = new DataAccessFacade();
-		List<String> retval = new ArrayList<>();
-		retval.addAll(da.readBooksMap().keySet());
-		return retval;
-	}
-	
-	@Override
-	public void checkoutBook(String memberId, String isbn) throws LibrarySystemException{
+	public CheckoutRecordEntry checkoutBook(String memberId, String isbn) throws LibrarySystemException{
 		DataAccess da = new DataAccessFacade();
 		LibraryMember member = da.searchMember(memberId);
 		if(member == null) {
@@ -53,10 +38,11 @@ public class SystemController implements ControllerInterface {
 		if(book == null || !book.isAvailable()) {
 			throw new LibrarySystemException("Book with given ISBN is not available!");
 		}
-
-		member.checkout(book.getNextAvailableCopy(), LocalDate.now(), LocalDate.now().plusDays(book.getMaxCheckoutLength()));
+		System.out.println("available book: " + book.getNextAvailableCopy());
+		CheckoutRecordEntry cr = member.checkout(book.getNextAvailableCopy(), LocalDate.now(), LocalDate.now().plusDays(book.getMaxCheckoutLength()));
 		da.saveNewMember(member);
 		da.saveBook(book);
+		return cr;
 	}
 	
 	@Override
@@ -90,6 +76,25 @@ public class SystemController implements ControllerInterface {
 	public HashMap<String, Book> addNewCopy(String isbn, String input) {
 		DataAccess da = new DataAccessFacade();
 		return da.addNewCopy(isbn, input);		
+	}
+	@Override
+	public List<CheckoutRecordEntry> allCheckoutEntries() {
+		DataAccess da = new DataAccessFacade();
+		List<CheckoutRecordEntry> allEntries = new ArrayList<CheckoutRecordEntry>();
+		for (LibraryMember member: da.readMemberMap().values()) {
+			allEntries.addAll(member.getCheckoutRecord().getCheckoutRecordEntries());
+		}
+		return allEntries;
+	}
+	@Override
+	public List<LibraryMember> getAllMembers() {
+		DataAccess da = new DataAccessFacade();
+		return new ArrayList<LibraryMember>(da.readMemberMap().values());
+	}
+	@Override
+	public List<Book> getAllBooks() {
+		DataAccess da = new DataAccessFacade();
+		return new ArrayList<Book>(da.readBooksMap().values());
 	}	
 	
 }
