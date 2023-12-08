@@ -85,6 +85,11 @@ public class SystemController implements ControllerInterface {
 	public void saveNewMember(LibraryMember mems) {
 		DataAccess da = new DataAccessFacade();
 		da.saveNewMember(mems);
+	}
+	@Override
+	public HashMap<String, Book> addNewCopy(String isbn, String input) {
+		DataAccess da = new DataAccessFacade();
+		return da.addNewCopy(isbn, input);		
 	}	
 	
 }
