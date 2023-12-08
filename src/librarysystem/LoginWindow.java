@@ -50,9 +50,6 @@ public class LoginWindow extends JFrame implements LibWindow {
 	}
 
 	private LoginWindow() {
-	}
-
-	public void init() {
 		setSize(900, 600);
 
 		ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel(Util.getImagePath() + "login-background.png");
@@ -64,6 +61,13 @@ public class LoginWindow extends JFrame implements LibWindow {
 
 		getContentPane().add(backgroundPanel);
 		setLocationRelativeTo(null);
+		System.out.println("Initiating login window");
+		init();
+	}
+
+
+	public void init() {		
+		clear();
 	}
 
 	private JPanel createSigninForm() {
@@ -88,26 +92,6 @@ public class LoginWindow extends JFrame implements LibWindow {
 		formPanel.add(passwordLabel, getGb(gbc, 0,1));
 		formPanel.add(password, getGb(gbc, 1,1));
 		formPanel.add(loginButton, getGb(gbc,1,2));
-	/*	gbc.gridx = 0;
-		gbc.gridy = 0;
-		formPanel.add(usernameLabel, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		formPanel.add(username, gbc);
-
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		formPanel.add(passwordLabel, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		formPanel.add(password, gbc);
-
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		formPanel.add(loginButton, gbc);*/
-
 		formPanel.setBorder(BorderFactory.createEmptyBorder(0, 300, 0, 0));
 		return formPanel;
 	}
@@ -131,14 +115,7 @@ public class LoginWindow extends JFrame implements LibWindow {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
-	
-	private void addBackButtonListener(JButton butn) {
-		butn.addActionListener(evt -> {
-			LibrarySystem.hideAllWindows();
-			LibrarySystem.INSTANCE.setVisible(true);
-		});
-	}
-	
+		
 	public static boolean isValidUsername(String username) {
         String regex = "^[a-z0-9_]{3,16}$";
         Pattern pattern = Pattern.compile(regex);
@@ -156,7 +133,8 @@ public class LoginWindow extends JFrame implements LibWindow {
 			SystemController systemController = new SystemController();
 			boolean isValidUsername = false;
 			boolean isValidPassword = false;
-			
+			System.out.println("Username: " + username.getText());
+			System.out.println("Password: " + password.getText());
 			try {
 				
 				if (isValidUsername(username.getText().toString())) {

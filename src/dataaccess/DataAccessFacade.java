@@ -56,35 +56,7 @@ public class DataAccessFacade implements DataAccess {
 	public Book searchBook(String isbn) {
 		HashMap<String,Book> bookMap = readBooksMap();
 		return bookMap.get(isbn);
-	}
-	
-	@Override
-	public List<Book> searchBook(String isbn,String title) {
-		HashMap<String,Book> bookMap = readBooksMap();
-		return bookMap.values().stream()
-		.filter(book -> filterBooks(book,isbn,title))
-		.collect(Collectors.toList());
-	}
-	
-	private boolean filterBooks(Book book, String isbn, String title) {
-		boolean matchIsbn = false;
-		boolean matchTitle = false;
-		if(isbn != null && !isbn.isEmpty()) {
-			if(book.getIsbn().toLowerCase().contains(isbn.toLowerCase())) {
-				matchIsbn = true;
-			}
-		}else {
-			matchIsbn = true;
-		}
-		if(title != null && !title.isEmpty()) {
-			if(book.getTitle().toLowerCase().contains(title.toLowerCase())) {
-				matchTitle = true;
-			}
-		}else {
-			matchTitle = true;
-		}
-		return matchIsbn && matchTitle;
-	}
+	}		
 	
 	public CheckoutRecord getCheckoutRecord(String memberID) {
 		LibraryMember mb = searchMember(memberID);
@@ -116,8 +88,13 @@ public class DataAccessFacade implements DataAccess {
 		return memberMap.get(memberId);
 	}
 	
-
-
+	@Override
+	public void addNewCopy(Book book) {
+		HashMap<String, Book> books = readBooksMap();
+		books.put(book.getIsbn(), book);
+		saveToStorage(StorageType.BOOKS, books);
+		
+	}
 	
 	@SuppressWarnings("unchecked")
 	public HashMap<String, User> readUserMap() {
@@ -214,19 +191,5 @@ public class DataAccessFacade implements DataAccess {
 		}
 		private static final long serialVersionUID = 5399827794066637059L;
 	}
-	
-	public HashMap<String,Book> addNewCopy(String isbn, String input) {
-		Book b = searchBook(isbn);
-		b.addCopy();
-    	int numberOfCopy = Integer.parseInt(input);
-    	while(numberOfCopy>1) {
-    		b.addCopy();
-    		numberOfCopy -= 1;
-    	}
-    	HashMap<String,Book> allBooks = readBooksMap();
-    	allBooks.put(isbn,b);
-    	saveToStorage(StorageType.BOOKS, allBooks);
-    	return allBooks;
-    }
 	
 }

@@ -31,6 +31,7 @@ import javax.swing.event.MenuEvent;
 
 import business.ControllerInterface;
 import business.SystemController;
+import dataaccess.Auth;
 
 
 public class LibrarySystem extends JFrame implements LibWindow {
@@ -42,14 +43,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
     private String pathToImage;
     private boolean isInitialized = false;
     private boolean isLoggedIn = false;
-    
-    private ControllerInterface ci = new SystemController();
-    
+        
     private static LibWindow[] allWindows = { 
     	LibrarySystem.INSTANCE,
 		LoginWindow.INSTANCE,
-		AllMemberIdsWindow.INSTANCE,	
-	//	AllBookIdsWindow.INSTANCE
 	};
     	
 	public static void hideAllWindows() {		
@@ -116,9 +113,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	if (mainPanel == null) {
     		mainPanel = new JPanel();
     		cardPanel = new JPanel(new CardLayout());    	
-	    	cardPanel.add(new HomePanel(this), MENUS.HOME.getText());
 	    	cardPanel.add(CheckoutPanel.getInstance(), MENUS.CHECKOUTS.getText());
-			cardPanel.add(AddBook.getInstance(), MENUS.BOOKS.getText());
+	    	cardPanel.add(AllBookIdsWindow.getInstance(), MENUS.BOOKS.getText());
 			cardPanel.add(AddNewMember.getInstance(), MENUS.MEMBERS.getText());    	
 	    	mainPanel.add(cardPanel, BorderLayout.CENTER);
 	    	landscapePanel.setVisible(false);
@@ -131,12 +127,15 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 	private void createMenus() {
 	     // Add the custom menu to the menu bar
-	     menuBar.add(createCustomJMenu(MENUS.HOME));
-	     menuBar.add(createCustomJMenu(MENUS.BOOKS));
-	     menuBar.add(createCustomJMenu(MENUS.CHECKOUTS));
-	     menuBar.add(createCustomJMenu(MENUS.MEMBERS));
-	     menuBar.add(createCustomJMenu(MENUS.LOGOUT));
-	     setJMenuBar(menuBar);
+		if (SystemController.currentAuth == Auth.BOTH || SystemController.currentAuth == Auth.ADMIN) {
+			menuBar.add(createCustomJMenu(MENUS.BOOKS));
+			menuBar.add(createCustomJMenu(MENUS.MEMBERS));
+		}
+		if (SystemController.currentAuth == Auth.BOTH || SystemController.currentAuth == Auth.LIBRARIAN) {
+			menuBar.add(createCustomJMenu(MENUS.CHECKOUTS));
+		} 
+	    menuBar.add(createCustomJMenu(MENUS.LOGOUT));
+	    setJMenuBar(menuBar);
     }
 	
 	private JMenu createCustomJMenu(MENUS menu) {
@@ -145,11 +144,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	    customMenu.addMouseListener(new MenuListener());
 	    return customMenu;	
 	}
-	
-	private void showMessageDialog(String message) {
-		JOptionPane.showMessageDialog(this, message);
-	}
-    
+	    
        
 	public boolean isLoggedIn() {
 		return isLoggedIn;
@@ -160,9 +155,11 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		this.isLoggedIn = isLoggedIn;
 		if (this.isLoggedIn) {
 			initCardPanel();
-			createMenus();
-			showCard(MENUS.HOME.getText());
+			createMenus();		
+			CardLayout cardLayout = (CardLayout) cardPanel.getLayout();
+			cardLayout.first(cardPanel);
 		} else {
+			
 			mainPanel.setVisible(false);
 			initLandscapePanel();
 			menuBar.setVisible(false);
@@ -188,8 +185,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	
     }
     
-    class MenuListener implements MouseListener {
-    	
+    class MenuListener implements MouseListener {    	
     	 @Override
          public void mouseClicked(MouseEvent e) {
              JMenuItem source = (JMenuItem) e.getSource();
