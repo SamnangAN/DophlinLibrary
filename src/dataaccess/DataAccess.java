@@ -20,4 +20,5 @@ public interface DataAccess {
 	List<Book> searchBook(String isbn, String title);
 	HashMap<String,Book> addNewCopy(String isbn, String input);
 	public CheckoutRecord getCheckoutRecord(String memberID);
+	public List<CheckoutRecord> getAllCheckoutRecord();
 }

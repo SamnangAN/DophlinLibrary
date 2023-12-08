@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,6 +90,15 @@ public class DataAccessFacade implements DataAccess {
 		LibraryMember mb = searchMember(memberID);
 		CheckoutRecord rc = new CheckoutRecord(mb);
 		return rc;
+	}
+	public List<CheckoutRecord> getAllCheckoutRecord() {
+		List<CheckoutRecord> re = new ArrayList<>();
+		HashMap<String, LibraryMember> us = readMemberMap();
+		List<LibraryMember> mems = us.values().stream().collect(Collectors.toList());
+		for(LibraryMember m:mems) {
+			re.add(new CheckoutRecord(m));
+		}
+		return re;
 	}
 
 	@SuppressWarnings("unchecked")
