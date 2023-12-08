@@ -49,7 +49,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	LibrarySystem.INSTANCE,
 		LoginWindow.INSTANCE,
 		AllMemberIdsWindow.INSTANCE,	
-		AllBookIdsWindow.INSTANCE
+	//	AllBookIdsWindow.INSTANCE
 	};
     	
 	public static void hideAllWindows() {		
@@ -122,6 +122,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	    	cardPanel.add(AddNewMemberUI.getInstance(), MENUS.MEMBERS.getText());    	
 	    	mainPanel.add(cardPanel, BorderLayout.CENTER);
 	    	landscapePanel.setVisible(false);
+	    	LoginWindow.INSTANCE.setVisible(false);
 	    	mainPanel.setVisible(true);
 	    	getContentPane().add(mainPanel);
     	}
