@@ -171,13 +171,11 @@ public class SystemController implements ControllerInterface {
 		}
 		return re;
 	}
-<<<<<<< HEAD
+
 	public LibraryMember searchMember(String memberId) {
 		DataAccess da = new DataAccessFacade();	
 		LibraryMember mb = da.searchMember(memberId);
 		return mb;
 	}
-	
-=======
->>>>>>> 69f158894aff557a5276c73e126c8c02e96ae886
+
 }
