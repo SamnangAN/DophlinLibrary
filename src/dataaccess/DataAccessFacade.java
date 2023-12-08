@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import business.Book;
 import business.BookCopy;
+import business.CheckoutRecord;
 import business.LibraryMember;
 import dataaccess.DataAccessFacade.StorageType;
 
@@ -82,6 +83,12 @@ public class DataAccessFacade implements DataAccess {
 			matchTitle = true;
 		}
 		return matchIsbn && matchTitle;
+	}
+	
+	public CheckoutRecord getCheckoutRecord(String memberID) {
+		LibraryMember mb = searchMember(memberID);
+		CheckoutRecord rc = new CheckoutRecord(mb);
+		return rc;
 	}
 
 	@SuppressWarnings("unchecked")
