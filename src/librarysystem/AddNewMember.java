@@ -137,17 +137,41 @@ public class AddNewMember extends JPanel{
 	                        System.out.print(memberId);
 	                        // Open the edit member UI (you need to implement this method)
 	                        openEditMemberUI(memberId);
+	                       
 	                    }
 	                }
 	            }
 	        });
+	        addMouseListener(new MouseAdapter() {
+	            @Override
+	            public void mouseClicked(MouseEvent e) {
+	                handlePanelClick();
+	            }
+	        });
 	        
 	    }
+	 private void handlePanelClick() {
+		 rewriteData();
+	    }
+	 private void rewriteData() {
+		 DataAccess access = new DataAccessFacade();
+		 modelRight.setRowCount(0);
+		 Object[] rowData = {"Member ID","First Name","Last Name","Street","City","State","ZIP","Telephone"};
+         modelRight.addRow(rowData);
+ 		HashMap<String,LibraryMember> v = access.readMemberMap();
+ 		List<LibraryMember> mems = v.values().stream().collect(Collectors.toList());
+         for (LibraryMember member : mems) {
+         	System.out.print("id:"+member.getMemberId());
+             Object[] rowDatas = {member.getMemberId(), member.getFirstName(), member.getLastName(),
+                     member.getAddress().getStreet(), member.getAddress().getCity(), member.getAddress().getState(),member.getAddress().getZip(), member.getTelephone()};
+             modelRight.addRow(rowDatas);
+         }
+	 }
 	 
 	 private void openEditMemberUI(String memberId) {
 	        // Implement logic to open the edit member UI based on the selected member ID
 	        // For simplicity, let's assume it's a new JFrame named EditMemberUI
-	        new EditMemberInfoUI(memberId).show();;
+	        new EditMemberInfoUI(memberId).show();
 	    }
 
 	  private void showMessage(String message) {

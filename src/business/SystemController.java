@@ -114,5 +114,10 @@ public class SystemController implements ControllerInterface {
 		}
 		return re;
 	}
+	public LibraryMember searchMember(String memberId) {
+		DataAccess da = new DataAccessFacade();	
+		LibraryMember mb = da.searchMember(memberId);
+		return mb;
+	}
 	
 }

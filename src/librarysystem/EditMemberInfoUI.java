@@ -4,15 +4,20 @@ package librarysystem;
 import javax.swing.*;
 
 import business.Address;
+import business.ControllerInterface;
 import business.LibraryMember;
+import business.SystemController;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class EditMemberInfoUI extends JPanel {
+public class EditMemberInfoUI extends JDialog {
 
     private JTextField memberIdField;
     private JTextField firstNameField;
@@ -24,46 +29,55 @@ public class EditMemberInfoUI extends JPanel {
     private JTextField telephoneField;
     static EditMemberInfoUI INSTANCE;
     static String memberId;
+    ControllerInterface ci = new SystemController();
     public EditMemberInfoUI(String memberId) {
     	this.memberId = memberId;
         setSize(1000, 600);
         setVisible(true);
         
-        
+        LibraryMember mb = ci.searchMember(memberId);
         JPanel formPanel = new JPanel() {
         };
         formPanel.setLayout(new GridLayout(9, 2, 10, 5));  
 
         formPanel.add(new JLabel("Member ID:"));
          memberIdField = new JTextField();
+         memberIdField.setText(memberId);
         formPanel.add(memberIdField);
 
         formPanel.add(new JLabel("First Name:"));
          firstNameField = new JTextField();
+         firstNameField.setText(mb.getFirstName());
         formPanel.add(firstNameField);
 
         formPanel.add(new JLabel("Last Name:"));
          lastNameField = new JTextField();
+         lastNameField.setText(mb.getLastName());
         formPanel.add(lastNameField);
 
         formPanel.add(new JLabel("Street:"));
          streetField = new JTextField();
+         streetField.setText(mb.getAddress().getStreet());
         formPanel.add(streetField);
 
         formPanel.add(new JLabel("City:"));
          cityField = new JTextField();
+         cityField.setText(mb.getAddress().getCity());
         formPanel.add(cityField);
 
         formPanel.add(new JLabel("State:"));
          stateField = new JTextField();
+         stateField.setText(mb.getAddress().getState());
         formPanel.add(stateField);
 
         formPanel.add(new JLabel("ZIP:"));
          zipField = new JTextField();
+         zipField.setText(mb.getAddress().getZip());
         formPanel.add(zipField);
         
         formPanel.add(new JLabel("Telephone:"));
          telephoneField = new JTextField();
+         telephoneField.setText(mb.getTelephone());
         formPanel.add(telephoneField);
         
         formPanel.add(new JLabel());
@@ -78,8 +92,10 @@ public class EditMemberInfoUI extends JPanel {
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateAndSave()) {             
+                if (validateAndSave()) {               
                     clearFields();
+                    dispose();
+                   
                 }
             }
         });
