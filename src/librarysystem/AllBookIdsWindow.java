@@ -253,20 +253,6 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
 		tableModel.setDataVector(bookList, columnNames);
 		ButtonColumn buttonColumn = new ButtonColumn(table, tableModel.getColumnCount() - 1);
 	}
-
-	private static class ImageBackgroundPanel extends JPanel {
-        private Image backgroundImage;
-
-        public ImageBackgroundPanel(String imagePath) {
-            this.backgroundImage = new ImageIcon(imagePath).getImage();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
-    }
 	
 	@Override
 	public boolean isInitialized() {
@@ -291,9 +277,10 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			LibrarySystem.hideAllWindows();
-			AddBook.INSTANCE.init();
-			Util.centerFrameOnDesktop(AddBook.INSTANCE);
-			AddBook.INSTANCE.setVisible(true);
+			AddBook addBook = new AddBook();
+			addBook.init();
+			Util.centerFrameOnDesktop(addBook);
+			addBook.setVisible(true);
 		}
 
     }
