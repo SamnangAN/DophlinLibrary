@@ -15,8 +15,14 @@ public interface ControllerInterface {
 	public void saveNewMember(LibraryMember mems);
 	public CheckoutRecord getCheckoutRecord(String memberID);
 	public List<CheckoutRecord> getAllCheckoutRecord();
+<<<<<<< HEAD
+	public HashMap<String,Book> addNewCopy(String isbn, String input);
+	public List<CheckoutRecordEntry> allCheckoutEntries();
+	public LibraryMember searchMember(String memberId);
+=======
 	public Book searchBook(String isbn);
 	public List<Book> searchBook(String isbn,String title);
 	public List<CheckoutRecordEntry> getAllCheckoutEntries();
-	public List<CheckoutRecordEntry> getMemberCheckoutEntries(String memberId) throws LibrarySystemException;
+	
+>>>>>>> 69f158894aff557a5276c73e126c8c02e96ae886
 }
