@@ -26,9 +26,14 @@ final public class LibraryMember extends Person implements Serializable {
 		return this.checkoutRecord;
 	}
 
-	public void checkout(BookCopy bookCopy, LocalDate checkoutDate, LocalDate dueDate) {
+	public CheckoutRecordEntry checkout(BookCopy bookCopy, LocalDate checkoutDate, LocalDate dueDate) {
+		if (this.checkoutRecord == null ) checkoutRecord = new CheckoutRecord(this);
 		bookCopy.changeAvailability();
-		this.checkoutRecord.addCheckoutRecordEntry(new CheckoutRecordEntry(bookCopy, checkoutDate, dueDate));	
+		return checkoutRecord.addCheckoutRecordEntry(bookCopy, checkoutDate, dueDate);
+	}
+	
+	public String getFullNameWithId() {
+		return memberId + " " + getFirstName() + " " + getLastName();
 	}
 	
 	
