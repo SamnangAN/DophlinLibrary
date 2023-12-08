@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class EditMemberInfoUI extends JPanel {
+public class EditMemberInfoUI extends JFrame {
 
     private JTextField memberIdField;
     private JTextField firstNameField;
@@ -24,9 +24,9 @@ public class EditMemberInfoUI extends JPanel {
     private JTextField telephoneField;
 
     public EditMemberInfoUI() {
-     /*   setTitle("Edit Member Info");
+        setTitle("Edit Member Info");
         setSize(1000, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);*/
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         
         
@@ -72,6 +72,7 @@ public class EditMemberInfoUI extends JPanel {
         JButton update = new JButton("Edit Members");
         bt.add(update);
         formPanel.add(update);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 50, 100));
         add(formPanel);
         
         update.addActionListener(new ActionListener() {

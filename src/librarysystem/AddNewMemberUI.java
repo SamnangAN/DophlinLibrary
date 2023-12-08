@@ -36,16 +36,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 
-public class AddNewMemberUI extends JPanel {
-	
-	private static AddNewMemberUI INSTANCE;
+public class AddNewMemberUI extends JFrame {
 	
 	ControllerInterface ci = new SystemController();
 	
 	DataAccessFacade ac = new DataAccessFacade();
 //	ArrayList<LibraryMember> m = new ArrayList<LibraryMember>();
     public AddNewMemberUI() {   	
-       // setTitle("Library Management System");
+        setTitle("Library Management System");
         setSize(2000, 1000);
        
         setLayout(new BorderLayout());
@@ -57,7 +55,7 @@ public class AddNewMemberUI extends JPanel {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
         }, BorderLayout.CENTER);
-     //   getRootPane().setBorder(BorderFactory.createEmptyBorder(70, 50, 20, 50)); // top, left, bottom, right
+        getRootPane().setBorder(BorderFactory.createEmptyBorder(70, 50, 20, 50)); // top, left, bottom, right
 
         // Create buttons on the left side
         JPanel buttonPanel = new JPanel();
@@ -85,7 +83,7 @@ public class AddNewMemberUI extends JPanel {
         // Create form on the right side with a background image
         JPanel formPanel = new JPanel() {
         };
-        formPanel.setLayout(new GridLayout(9, 2, 10, 5));  
+        formPanel.setLayout(new GridLayout(9, 3, 20, 5));  
 
         formPanel.add(new JLabel("Member ID:"));
         JTextField memberIdField = new JTextField();
@@ -175,7 +173,7 @@ public class AddNewMemberUI extends JPanel {
                 LibraryMember mems = new LibraryMember(memberId,firstName,lastName,telephone,a);
                 ci.saveNewMember(mems);
                
-                
+
                 showMessage("You have been added a member successfully");
                 Object[] rowData = {memberId,firstName, lastName,
                 		street, city,state,zip, telephone};
@@ -202,15 +200,6 @@ public class AddNewMemberUI extends JPanel {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-    public static AddNewMemberUI getInstance() {
-    	if (INSTANCE == null) {
-    		INSTANCE = new AddNewMemberUI();
-    	}
-    	return INSTANCE;
-    }
-
 
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
