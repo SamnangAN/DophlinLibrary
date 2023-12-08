@@ -59,15 +59,17 @@ public class PrintCheckoutRecordForm extends JFrame {
 
        
         modelRight.addColumn("IBN");
-        modelRight.addColumn("Title");
-      //  modelRight.addColumn("Author");
-        modelRight.addColumn("Copies");
+        modelRight.addColumn("CheckoutDate");
+        modelRight.addColumn("DueDate");
         DataAccess access = new DataAccessFacade();
-      		HashMap<String, Book> v = access.readBooksMap();
-      		List<Book> books = v.values().stream().collect(Collectors.toList());
-              for (Book book : books) {
-                  Object[] rowDatas = {book.getIsbn(),book.getTitle(),book.getNumCopies()};
-                  modelRight.addRow(rowDatas);
+        List<CheckoutRecord> recs = access.getAllCheckoutRecord();
+              for (CheckoutRecord rc : recs) {
+            	  List<CheckoutRecordEntry> entr = rc.getCheckoutRecordEntries();
+            	  for(CheckoutRecordEntry ent:entr) {
+            		  Object[] rowDatas = {ent.getBookCopy().getBook().getIsbn(),ent.getCheckoutDate(),ent.getDueDate()};
+                      modelRight.addRow(rowDatas);
+            	  }
+                  
               }
         JTable bookTable = new JTable(modelRight);
         JScrollPane tableScrollPane = new JScrollPane(bookTable);
