@@ -12,6 +12,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import business.Book;
+import business.CheckoutRecord;
+import business.CheckoutRecordEntry;
 import business.LibraryMember;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
@@ -58,13 +60,13 @@ public class PrintCheckoutRecordForm extends JFrame {
        
         modelRight.addColumn("IBN");
         modelRight.addColumn("Title");
-        modelRight.addColumn("Author");
+      //  modelRight.addColumn("Author");
         modelRight.addColumn("Copies");
         DataAccess access = new DataAccessFacade();
       		HashMap<String, Book> v = access.readBooksMap();
       		List<Book> books = v.values().stream().collect(Collectors.toList());
               for (Book book : books) {
-                  Object[] rowDatas = {book.getIsbn(),book.getTitle(),book.getAuthors(),book.getNumCopies()};
+                  Object[] rowDatas = {book.getIsbn(),book.getTitle(),book.getNumCopies()};
                   modelRight.addRow(rowDatas);
               }
         JTable bookTable = new JTable(modelRight);
@@ -102,11 +104,15 @@ public class PrintCheckoutRecordForm extends JFrame {
     	JOptionPane.showMessageDialog(this, "Member found!", "Success", JOptionPane.ERROR_MESSAGE);
        // DefaultTableModel model = (DefaultTableModel) checkoutTable.getModel();
     	modelRight.setRowCount(0); // Clear existing rows
-
-        // Add example data (replace with actual data retrieval logic)
-    	modelRight.addRow(new Object[]{"1001", "Book1", "2023-01-01"});
-    	modelRight.addRow(new Object[]{"1001", "Book2", "2023-02-01"});
-    	modelRight.addRow(new Object[]{"1002", "Book3", "2023-03-01"});
+    	
+    	 DataAccess access = new DataAccessFacade();
+    	 CheckoutRecord rc = access.getCheckoutRecord(memberId);
+   		List<CheckoutRecordEntry> records = rc.getCheckoutRecordEntries();
+           for (CheckoutRecordEntry rec : records) {
+               Object[] rowDatas = {rec.getBookCopy().getBook().getIsbn(),rec.getCheckoutDate(),rec.getDueDate()};
+               modelRight.addRow(rowDatas);
+           }
+        
     }
 
     public static void main(String[] args) {

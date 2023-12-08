@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import business.Book;
+import business.CheckoutRecord;
 import business.LibraryMember;
 import dataaccess.DataAccessFacade.StorageType;
 
@@ -18,4 +19,5 @@ public interface DataAccess {
 	public Book searchBook(String isbn);
 	List<Book> searchBook(String isbn, String title);
 	HashMap<String,Book> addNewCopy(String isbn, String input);
+	public CheckoutRecord getCheckoutRecord(String memberID);
 }

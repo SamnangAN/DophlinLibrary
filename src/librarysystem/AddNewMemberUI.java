@@ -36,14 +36,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
 
-public class AddNewMemberUI extends JFrame {
+public class AddNewMemberUI extends JPanel {
+	private static AddNewMemberUI INSTANCE;
 	
 	ControllerInterface ci = new SystemController();
 	
 	DataAccessFacade ac = new DataAccessFacade();
 //	ArrayList<LibraryMember> m = new ArrayList<LibraryMember>();
     public AddNewMemberUI() {   	
-        setTitle("Library Management System");
         setSize(2000, 1000);
        
         setLayout(new BorderLayout());
@@ -56,29 +56,6 @@ public class AddNewMemberUI extends JFrame {
             }
         }, BorderLayout.CENTER);
         getRootPane().setBorder(BorderFactory.createEmptyBorder(70, 50, 20, 50)); // top, left, bottom, right
-
-        // Create buttons on the left side
-        JPanel buttonPanel = new JPanel();
-        
-        buttonPanel.setLayout(new GridLayout(7, 1, 10, 5));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 50, 100));
-
-        JButton checkoutButton = new JButton("Checkout Book");
-        checkoutButton.setPreferredSize(new Dimension(300,30));
-        JButton overdueButton = new JButton("Overdue Date");
-        JButton printCheckoutButton = new JButton("Print Member Checkout");
-        JButton addMemberButton = new JButton("Add Member");
-        JButton addBookButton = new JButton("Add Book");
-        JButton addBookCopyButton = new JButton("Add Book Copy");
-        JButton editMemberButton = new JButton("Edit Member");
-
-        buttonPanel.add(checkoutButton);
-        buttonPanel.add(overdueButton);
-        buttonPanel.add(printCheckoutButton);
-        buttonPanel.add(addMemberButton);
-        buttonPanel.add(addBookButton);
-        buttonPanel.add(addBookCopyButton);
-        buttonPanel.add(editMemberButton);
 
         // Create form on the right side with a background image
         JPanel formPanel = new JPanel() {
@@ -152,7 +129,6 @@ public class AddNewMemberUI extends JFrame {
 
         // Add components to the main frame
         setLayout(new BorderLayout());
-        add(buttonPanel, BorderLayout.WEST);
         add(formPanel, BorderLayout.CENTER);
        
         
@@ -206,6 +182,13 @@ public class AddNewMemberUI extends JFrame {
             new AddNewMemberUI().setVisible(true);
         });
     }
+	public static Component getInstance() {
+		// TODO Auto-generated method stub
+		if (INSTANCE == null) {
+			INSTANCE = new AddNewMemberUI();
+		}
+		return INSTANCE;
+	}
 }
 
 
