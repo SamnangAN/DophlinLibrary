@@ -295,9 +295,9 @@ public class AddBook extends JPanel implements LibWindow {
 		public void actionPerformed(ActionEvent e) {
 			LibrarySystem.hideAllWindows();
 			setVisible(false);
-			AllBookIdsWindow.INSTANCE.init();
-			Util.centerFrameOnDesktop(AllBookIdsWindow.INSTANCE);
-			AllBookIdsWindow.INSTANCE.setVisible(true);
+			AllBookIdsWindow.getInstance().init();
+			Util.centerFrameOnDesktop(AllBookIdsWindow.getInstance());
+			AllBookIdsWindow.getInstance().setVisible(true);
 		}
 
     }

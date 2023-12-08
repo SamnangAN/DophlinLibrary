@@ -6,10 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -22,20 +19,14 @@ import java.util.stream.Collectors;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -43,16 +34,14 @@ import javax.swing.table.TableRowSorter;
 
 import business.Author;
 import business.Book;
-import business.BookCopy;
 import business.ControllerInterface;
 import business.SystemController;
-import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 
 
-public class AllBookIdsWindow extends JFrame implements LibWindow {
+public class AllBookIdsWindow extends JPanel {
+	private static AllBookIdsWindow INSTANCE;
 	private static final long serialVersionUID = 1L;
-	public static final AllBookIdsWindow INSTANCE = new AllBookIdsWindow();
 	private static final String CREATE_NEW_BOOK_LBL = "> Add New Book";
     ControllerInterface ci = new SystemController();
     private boolean isInitialized = false;
@@ -63,26 +52,29 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
     private JTextField titleTxtField;
     Vector<String> columnNames = new Vector<>();
 
-    DataAccessFacade dataAccess = new DataAccessFacade();
+    public static AllBookIdsWindow getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new AllBookIdsWindow();
+		}
+		return INSTANCE;
+	}
+    
+    public AllBookIdsWindow() {
+    	init();
+	}
 
-	//Singleton class
-	private AllBookIdsWindow() {}
-
-	@Override
 	public void init() {
-		setSize(1200, 800);
-
-		ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel(Util.getImagePath() + "login-background.png");
+		
+		JPanel backgroundPanel = new JPanel();
 		backgroundPanel.setLayout(new BorderLayout());
 		JPanel formPanel = createBookForm();
 		JPanel menuLink = createMenuLink();
 
 		backgroundPanel.setLayout(new BorderLayout());
-		backgroundPanel.add(menuLink, BorderLayout.WEST);
-		backgroundPanel.add(formPanel,BorderLayout.EAST);
+//		backgroundPanel.add(menuLink, BorderLayout.WEST);
+		backgroundPanel.add(formPanel,BorderLayout.CENTER);
 
-		getContentPane().add(backgroundPanel);
-		setLocationRelativeTo(null);
+		add(backgroundPanel);
 	}
 
 	private JPanel createBookForm() {
@@ -224,7 +216,7 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
 	}
 
 	private Vector<Vector<Object>> getBookList() {
-		HashMap<String, Book> books =  dataAccess.readBooksMap();
+		HashMap<String, Book> books =  ci.readBooksMap();
 		return covertToTableData(books.values());
 	}
 
@@ -252,17 +244,6 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
 		Vector<Vector<Object>> bookList = covertToTableData(books);
 		tableModel.setDataVector(bookList, columnNames);
 		ButtonColumn buttonColumn = new ButtonColumn(table, tableModel.getColumnCount() - 1);
-	}
-	
-	@Override
-	public boolean isInitialized() {
-		return isInitialized;
-	}
-
-	@Override
-	public void isInitialized(boolean val) {
-		isInitialized = val;
-
 	}
 	
 	class AddFilterActionListener implements ActionListener {
@@ -336,7 +317,7 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String enteredText = textField.getText();
-                    dataAccess.addNewCopy(isbn, enteredText);
+                    ci.addNewCopy(isbn, enteredText);
                     performFitler();
                     JOptionPane.showMessageDialog(dialog, "New Copies is saved");
                     dialog.dispose();
