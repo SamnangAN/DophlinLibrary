@@ -3,6 +3,7 @@ package librarysystem;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -92,18 +93,18 @@ public class CheckoutPanel extends JPanel {
 	private void addCheckoutPanel() {
 		JPanel innerPanel = new JPanel();
 		innerPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
-		innerPanel.setLayout(new GridLayout(0, 5, 0, 0));
+		innerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		// Add components to the panel
 		JLabel memberIdLabel = new JLabel("Member ID: ");	
-		memberIdField = new JTextField();
+		memberIdField = new JTextField(15);
 
 		innerPanel.add(memberIdLabel);
 		innerPanel.add(memberIdField);
 
 		JLabel isbnLabel = new JLabel("ISBN: ");	
 		isbnLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		isbnField = new JTextField();
+		isbnField = new JTextField(15);
 		innerPanel.add(isbnLabel);
 		innerPanel.add(isbnField);
 		
@@ -135,11 +136,11 @@ public class CheckoutPanel extends JPanel {
 	private void addPrintRecordPanel() {
 		JPanel innerPanel = new JPanel();
 		innerPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
-		innerPanel.setLayout(new GridLayout(0, 3, 0, 0));
+		innerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		// Add components to the panel
 		JLabel memberIdLabel = new JLabel("Member ID: ");	
-		printReportMemberIdField = new JTextField();
+		printReportMemberIdField = new JTextField(15);
 
 		innerPanel.add(memberIdLabel);
 		innerPanel.add(printReportMemberIdField);
@@ -174,10 +175,10 @@ public class CheckoutPanel extends JPanel {
 	{
 		JPanel innerPanel = new JPanel();
 		innerPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
-		innerPanel.setLayout(new GridLayout(0, 3, 0, 0));
+		innerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		JLabel isbnLabel = new JLabel("ISBN: ");	
-		isbnOverDueField = new JTextField();
+		isbnOverDueField = new JTextField(15);
 		innerPanel.add(isbnLabel);
 		innerPanel.add(isbnOverDueField);
 	
@@ -218,6 +219,7 @@ public class CheckoutPanel extends JPanel {
 		resultTable = new JTable();
 		resultTable.setModel(allCheckoutDataSource);
 		resultTable.setDefaultRenderer(Object.class, new CustomCellRenderer());
+		resultTable.setPreferredScrollableViewportSize(new Dimension(1000,500));
 	  
         initData();
         
