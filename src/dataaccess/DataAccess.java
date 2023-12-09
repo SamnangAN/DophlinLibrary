@@ -6,7 +6,6 @@ import java.util.List;
 import business.Book;
 import business.CheckoutRecord;
 import business.LibraryMember;
-import dataaccess.DataAccessFacade.StorageType;
 
 public interface DataAccess { 
 	public HashMap<String,Book> readBooksMap();

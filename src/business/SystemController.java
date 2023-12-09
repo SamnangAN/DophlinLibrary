@@ -86,12 +86,7 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		LibraryMember member = da.searchMember(memberId);
 		if(member == null) {
-			throw new LibrarySystemException("Given Member ID does not exist!	@Override\r\n"
-					+ "	public List<CheckoutRecordEntry> allCheckoutEntries() {\r\n"
-					+ "		// TODO Auto-generated method stub\r\n"
-					+ "		return null;\r\n"
-					+ "	}\r\n"
-					+ "	");
+			throw new LibrarySystemException("Given Member ID does not exist!");
 		}
 		Book book = da.searchBook(isbn);
 		if(book == null || !book.isAvailable()) {
@@ -117,13 +112,22 @@ public class SystemController implements ControllerInterface {
 			result.put(bookCopy, null);
 		}
 
+		System.out.println("Result before size: " + result);
+		
 		for (LibraryMember member: da.readMemberMap().values()) {
 			for (CheckoutRecordEntry entry: member.getCheckoutRecord().getCheckoutRecordEntries()) {
 				if (entry.getBookCopy().getBook().equals(book)) {
-					result.put(entry.getBookCopy(), entry);
+					for (BookCopy bookCopy: result.keySet()) {
+						if (bookCopy.equals(entry.getBookCopy())) {
+							result.put(bookCopy, entry);
+							break;
+						}
+					}
 				}
 			}
 		}
+		
+		System.out.println("Result size: " + result);
 		return result; 		
 	}
 	@Override
@@ -155,11 +159,13 @@ public class SystemController implements ControllerInterface {
 		return new ArrayList<Book>(da.readBooksMap().values());
 	}	
 	
-	public CheckoutRecord getCheckoutRecord(String memberID) {
-		DataAccess da = new DataAccessFacade();	
-		LibraryMember mb = da.searchMember(memberID);
-		CheckoutRecord rc = new CheckoutRecord(mb);
-		return rc;
+	public CheckoutRecord getCheckoutRecord(String memberId) throws LibrarySystemException {
+		DataAccess da = new DataAccessFacade();
+		LibraryMember member = da.searchMember(memberId);
+		if(member == null) {
+			throw new LibrarySystemException("Given Member ID does not exist!");
+		}
+		return member.getCheckoutRecord();
 	}
 	public List<CheckoutRecord> getAllCheckoutRecord() {
 		DataAccess da = new DataAccessFacade();	

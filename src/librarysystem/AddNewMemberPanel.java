@@ -2,6 +2,7 @@ package librarysystem;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -120,6 +121,7 @@ public class AddNewMemberPanel extends JPanel{
             
             JTable memberTable = new JTable(modelRight);
 	        JScrollPane tableScrollPane = new JScrollPane(memberTable);
+	        memberTable.setPreferredSize(new Dimension(800,400));
 	        mainPanel.add(new JLabel("All members: "));
 	        add(memberTable, BorderLayout.SOUTH);
 	        

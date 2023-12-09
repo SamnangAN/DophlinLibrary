@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +39,7 @@ public class CheckoutPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel topPanel, centerPanel;
-	private JPanel newCheckoutPanel, printCeckoutPanel, checkBookOverDue; 
+	private JPanel titledNewCheckoutPanel, titledPrintCeckoutPanel, titledCheckBookOverDue; 
 	private JTextField memberIdField;
 	private JTextField isbnField;
 	
@@ -49,7 +50,6 @@ public class CheckoutPanel extends JPanel {
 	private final String[] headerNames = {"ISBN", "Title", "Copy number", "Library Member", "Checkout Date", "Due Date"};
 	
     private DefaultTableModel allCheckoutDataSource = new DefaultTableModel(0, 0);
-    private DefaultTableModel overdueCheckDataSource = new DefaultTableModel(0, 0);
     
     
     private ControllerInterface co = new SystemController();
@@ -66,48 +66,50 @@ public class CheckoutPanel extends JPanel {
 		// Create the JPanel
 		topPanel = new JPanel(new BorderLayout());
 		
-		newCheckoutPanel = getTitledPanel("New checkout");		
-		JPanel printCeckoutPanel = getTitledPanel("Print checkout for member");
-		JPanel checkBookOverDue = new JPanel();
-		checkBookOverDue.setBorder(BorderFactory.createTitledBorder("Check book overdue"));
+		titledNewCheckoutPanel = getTitledPanel("New checkout");		
+		titledPrintCeckoutPanel = getTitledPanel("Print checkout for member");
+		titledCheckBookOverDue = getTitledPanel("Check book overdue");
 		
-		topPanel.add(newCheckoutPanel, BorderLayout.EAST);
-		topPanel.add(printCeckoutPanel, BorderLayout.CENTER);
-		topPanel.add(checkBookOverDue, BorderLayout.WEST);
+		topPanel.add(titledNewCheckoutPanel, BorderLayout.EAST);
+		topPanel.add(titledPrintCeckoutPanel, BorderLayout.CENTER);
+		topPanel.add(titledCheckBookOverDue, BorderLayout.WEST);
 		
 		topPanel.setLayout(new GridLayout(0, 1, 0, 0));
 		addCheckoutPanel();
 		addOverDuePanel();
+		addPrintRecordPanel();
+		add(topPanel, BorderLayout.NORTH);
 	}
 	
 	private JPanel getTitledPanel(String title) {
-		JPanel newPanel = new JPanel();
-		newPanel.setBorder(BorderFactory.createTitledBorder("New checkout"));	
+		JPanel newPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		newPanel.setBorder(BorderFactory.createTitledBorder(title));	
 		return newPanel;
 	}
 	
 	
 	
 	private void addCheckoutPanel() {
-		JPanel topInnerPanel = new JPanel();
-		topInnerPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
-
+		JPanel innerPanel = new JPanel();
+		innerPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
+		innerPanel.setLayout(new GridLayout(0, 5, 0, 0));
+		
 		// Add components to the panel
 		JLabel memberIdLabel = new JLabel("Member ID: ");	
 		memberIdField = new JTextField();
-		topInnerPanel.setLayout(new GridLayout(0, 5, 0, 0));
-		topInnerPanel.add(memberIdLabel);
-		topInnerPanel.add(memberIdField);
+
+		innerPanel.add(memberIdLabel);
+		innerPanel.add(memberIdField);
 
 		JLabel isbnLabel = new JLabel("ISBN: ");	
 		isbnLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		isbnField = new JTextField();
-		topInnerPanel.add(isbnLabel);
-		topInnerPanel.add(isbnField);
-		topPanel.add(topInnerPanel);
+		innerPanel.add(isbnLabel);
+		innerPanel.add(isbnField);
+		
 		
 		JButton checkoutButton = new JButton("Checkout");
-		topInnerPanel.add(checkoutButton);
+		innerPanel.add(checkoutButton);
 		checkoutButton.setVerticalAlignment(SwingConstants.BOTTOM);
 		checkoutButton.addActionListener(e-> {
 			// Handle the checkout logic here
@@ -126,45 +128,83 @@ public class CheckoutPanel extends JPanel {
 			}			
 		});
 
-		// Add the panel to the JFrame
-		add(topPanel, BorderLayout.NORTH);
+		titledNewCheckoutPanel.add(innerPanel);
 	}
 	
+
+	private void addPrintRecordPanel() {
+		JPanel innerPanel = new JPanel();
+		innerPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
+		innerPanel.setLayout(new GridLayout(0, 3, 0, 0));
+		
+		// Add components to the panel
+		JLabel memberIdLabel = new JLabel("Member ID: ");	
+		printReportMemberIdField = new JTextField();
+
+		innerPanel.add(memberIdLabel);
+		innerPanel.add(printReportMemberIdField);
+
+		
+		JButton checkoutButton = new JButton("Print checkout record");
+		innerPanel.add(checkoutButton);
+		checkoutButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		checkoutButton.addActionListener(e-> {
+			// Handle the checkout logic here
+			String memberId = printReportMemberIdField.getText();
+			try {
+				List<CheckoutRecordEntry> entries = co.getCheckoutRecord(memberId).getCheckoutRecordEntries();
+				tableDescription.setText("Checkout records for member " + memberId + ": ");
+				DefaultTableModel result = new DefaultTableModel(0, 0);	
+				result.setColumnIdentifiers(headerNames);
+				resultTable.setModel(result);
+				result.fireTableDataChanged();
+				for (CheckoutRecordEntry entry: entries) {
+					addEntryToDataSource(result, entry.getBookCopy(), entry);
+				}	
+			} catch(Exception ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+			}			
+		});
+
+		titledPrintCeckoutPanel.add(innerPanel);
+	}
+	
+	// OVERDUE
 	private void addOverDuePanel()
 	{
-		JPanel overDuePanel = new JPanel();
-		overDuePanel.setBorder(new EmptyBorder(10, 30, 10, 30));
-		overDuePanel.setLayout(new GridLayout(0, 5, 0, 0));
+		JPanel innerPanel = new JPanel();
+		innerPanel.setBorder(new EmptyBorder(10, 30, 10, 30));
+		innerPanel.setLayout(new GridLayout(0, 3, 0, 0));
 
 		JLabel isbnLabel = new JLabel("ISBN: ");	
-		isbnLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		isbnOverDueField = new JTextField();
-		overDuePanel.add(isbnLabel);
-		overDuePanel.add(isbnOverDueField);
-		topPanel.add(overDuePanel);
+		innerPanel.add(isbnLabel);
+		innerPanel.add(isbnOverDueField);
+	
 		
 		JButton checkoutButton = new JButton("Check overdues");
-		overDuePanel.add(checkoutButton);
+		innerPanel.add(checkoutButton);
 		checkoutButton.setVerticalAlignment(SwingConstants.BOTTOM);
 		checkoutButton.addActionListener(e-> {
 			try {
 				System.out.println("Checking overdue for isbn: " + isbnOverDueField.getText());
 				HashMap<BookCopy, CheckoutRecordEntry> entries = co.checkBookOverdue(isbnOverDueField.getText());
-				tableDescription.setText("Overdue results: ");				
-				overdueCheckDataSource.setRowCount(0);		
+				tableDescription.setText("Overdue results: ");
+				DefaultTableModel result = new DefaultTableModel(0, 0);	
+				result.setColumnIdentifiers(headerNames);
+				resultTable.setModel(result);
+				result.fireTableDataChanged();
 				for (BookCopy bookCopy: entries.keySet()) {
-					addEntryToDataSource(overdueCheckDataSource, bookCopy, entries.get(bookCopy));
+					addEntryToDataSource(result, bookCopy, entries.get(bookCopy));
 				}	
-				resultTable.setModel(overdueCheckDataSource);
+				
 			} catch(Exception ex) {
 				JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			
 		});
 
-		// Add the panel to the JFrame
-		add(topPanel, BorderLayout.NORTH);
-
+		titledCheckBookOverDue.add(innerPanel);
 	}
 	
 	private void initResultPanel() {
@@ -172,9 +212,8 @@ public class CheckoutPanel extends JPanel {
 		centerPanel.setLayout(new BorderLayout());
 		centerPanel.setBorder(new EmptyBorder(20, 20, 20, 20));	
 			
-    	tableDescription = new JLabel("All checkouts");    	
+    	tableDescription = new JLabel("All checkouts: ");    	
 		allCheckoutDataSource.setColumnIdentifiers(headerNames);
-		overdueCheckDataSource.setColumnIdentifiers(headerNames);
 		
 		resultTable = new JTable();
 		resultTable.setModel(allCheckoutDataSource);
