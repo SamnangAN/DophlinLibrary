@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -38,7 +39,7 @@ import business.SystemController;
 
 public class AddBookPanel extends JPanel {
 	private static AddBookPanel INSTANCE;
-	
+
 	protected static final String BACK_LBL = "> Back";
 	private JTextField isbnTxtField;
 	private JTextField titleTxtField;
@@ -64,14 +65,14 @@ public class AddBookPanel extends JPanel {
 
 	public AddBookPanel() {
 	}
-	
+
 	public static AddBookPanel getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new AddBookPanel();
 		}
 		return INSTANCE;
 	}
-	
+
 	public void prepareData() {
     	book.resetAuthor();
     	isbnTxtField.setText("");
@@ -92,7 +93,7 @@ public class AddBookPanel extends JPanel {
 		return backgroundPanel;
 
 	}
-	
+
 	private JPanel createMenuLink() {
 		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JButton linkButton = new JButton(BACK_LBL);
@@ -108,7 +109,7 @@ public class AddBookPanel extends JPanel {
         leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20,10));
         return leftPanel;
 	}
-	
+
 	private void addHoverUnderlineText(JButton linkButton) {
 		linkButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -120,51 +121,51 @@ public class AddBookPanel extends JPanel {
             	linkButton.setText("<html><u>" + BACK_LBL + "</u></html>");
             }
         });
-		
+
 	}
-	
+
 
 	private JPanel createBookForm() {
 		JPanel form = new JPanel(new BorderLayout());
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(createFormTopPanel(),BorderLayout.NORTH);
 		topPanel.setOpaque(false);
-		
+
 		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(createFormCenterPanel(),BorderLayout.CENTER);		
-		
+		centerPanel.add(createFormCenterPanel(),BorderLayout.CENTER);
+
 		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JButton saveButton = new JButton("Add");
 		saveButton.addActionListener(new SaveBookActionListener());
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new CancelBookActionListener());
-		
+
 		bottomPanel.add(cancelButton);
 		bottomPanel.add(saveButton);
-		
+
 		form.add(topPanel,BorderLayout.NORTH);
 		form.add(centerPanel,BorderLayout.CENTER);
 		form.add(bottomPanel,BorderLayout.SOUTH);
 		form.setOpaque(false);
-		return form; 
+		return form;
 	}
-	
+
 	private JPanel createFormCenterPanel() {
 		loadTableForm();
 		JPanel authorPanel = new JPanel(new BorderLayout());
-		
+
 		JPanel addAuthor =new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel authorLbl = new JLabel("Author:");
 		JButton addAuthorButton = new JButton("+");
 		addAuthorButton.addActionListener(new AddAuthorActionListener());
 		addAuthor.add(authorLbl);
 		addAuthor.add(addAuthorButton);
-		
+
 		authorPanel.add(addAuthor,BorderLayout.NORTH);
-		
+
 		JScrollPane tableScrollPane= new JScrollPane(table);
 		authorPanel.add(tableScrollPane, BorderLayout.CENTER);
-		
+
 		authorPanel.setOpaque(false);
 		return authorPanel;
 	}
@@ -176,7 +177,7 @@ public class AddBookPanel extends JPanel {
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.insets = new Insets(10, 10, 10, 10);
-		
+
 		JLabel addNewBookLbl = new JLabel("Add New Book");
 		addNewBookLbl.setFont(new Font("Arial", Font.BOLD,20));
 
@@ -186,10 +187,10 @@ public class AddBookPanel extends JPanel {
 
 		JLabel titleLbl = new JLabel("Title:");
 		titleTxtField = new JTextField(15);
-		
+
 		JLabel maximunCheckoutLbl = new JLabel("Maximum Checkout Length:");
 		maximunCheckoutTxtField = new JTextField(15);
-		
+
 		JLabel numberOfCopyLbl = new JLabel("Number Of Copy:");
 		numberOfCopyTxtField = new JTextField(15);
 
@@ -200,7 +201,7 @@ public class AddBookPanel extends JPanel {
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		formPanel.add(isbnLbl, gbc);
-		
+
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		formPanel.add(isbnTxtField, gbc);
@@ -212,46 +213,46 @@ public class AddBookPanel extends JPanel {
 		gbc.gridx = 1;
 		gbc.gridy = 2;
 		formPanel.add(titleTxtField, gbc);
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		formPanel.add(maximunCheckoutLbl, gbc);
-		
+
 		gbc.gridx = 1;
 		gbc.gridy = 3;
 		formPanel.add(maximunCheckoutTxtField, gbc);
-		
+
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		formPanel.add(numberOfCopyLbl, gbc);
-		
+
 		gbc.gridx = 1;
 		gbc.gridy = 4;
 		formPanel.add(numberOfCopyTxtField, gbc);
 
 		return formPanel;
 	}
-	
+
 	private void loadTableForm() {
 		initColumnNames();
 		List<Author> authors =  book.getAuthors();
 		Vector<Vector<Object>> authorList = covertToTableData(authors);
 		tableModel = new DefaultTableModel();
 		tableModel.setDataVector(authorList, columnNames);
-		
+
 
         table = new JTable(tableModel);
         table.setPreferredScrollableViewportSize(new Dimension(1000,200));
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
         table.setRowSorter(sorter);
 	}
-	
+
 	private void reloadTableForm() {
 		List<Author> authors =  book.getAuthors();
 		Vector<Vector<Object>> authorList = covertToTableData(authors);
 		tableModel.setDataVector(authorList, columnNames);
 	}
-	
+
 	private Vector<Vector<Object>> covertToTableData(Collection<Author> authors) {
 		Vector<Vector<Object>> data = new Vector<>();
 		authors.forEach(author -> {
@@ -265,7 +266,7 @@ public class AddBookPanel extends JPanel {
 		});
 		return data;
 	}
-	
+
 	private void initColumnNames() {
 		columnNames.add("FirstName");
 		columnNames.add("LastName");
@@ -273,21 +274,28 @@ public class AddBookPanel extends JPanel {
 		columnNames.add("Address");
 		columnNames.add("Bio");
 	}
-	
+
 	class SaveBookActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			String mcl = maximunCheckoutTxtField.getText();
+			String ncp = numberOfCopyTxtField.getText();
+			if(!Util.isNumeric(ncp) || !Util.isNumeric(mcl)) {
+				JOptionPane.showMessageDialog(null, "Cannot read Maximum Checkout or Number of copy!");
+			}else {
+
 			book.setIsbn(isbnTxtField.getText());
-			book.setMaxCheckoutLength(Integer.parseInt(maximunCheckoutTxtField.getText()));
+			book.setMaxCheckoutLength(Integer.parseInt(mcl));
 			book.setTitle(titleTxtField.getText());
-			book.setCopies(Integer.parseInt(numberOfCopyTxtField.getText()));
+			book.setCopies(Integer.parseInt(ncp));
 			ci.saveBook(book);
 			AllBookPanel.getInstance().performFitler();
 			new CancelBookActionListener().actionPerformed(e);
 		}
+		}
 
     }
-	
+
 	class CheckExitingIsbnActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -305,7 +313,7 @@ public class AddBookPanel extends JPanel {
 		}
 
     }
-	
+
 	class CancelBookActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -314,15 +322,15 @@ public class AddBookPanel extends JPanel {
 		}
 
     }
-	
+
 	class AddAuthorActionListener implements ActionListener {
-		
+
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			openPopupForm();
 		}
-		
+
 		private void openPopupForm() {
             JDialog dialog = new JDialog();
             dialog.setTitle("Add Author");
@@ -358,11 +366,11 @@ public class AddBookPanel extends JPanel {
 	        mainPanel.add(new JLabel("Telephone:"));
 	        telephoneField = new JTextField();
 	        mainPanel.add(telephoneField);
-	        
+
 	        mainPanel.add(new JLabel("Bio:"));
 	        bioField = new JTextField();
 	        mainPanel.add(bioField);
-            
+
             JButton submitButton = new JButton("Submit");
             submitButton.addActionListener(new ActionListener() {
                 @Override
@@ -390,9 +398,9 @@ public class AddBookPanel extends JPanel {
             dialog.setLayout(new BorderLayout());
             dialog.add(mainPanel,BorderLayout.NORTH);
             dialog.setSize(600, 450);
-            dialog.setModal(true); 
+            dialog.setModal(true);
             dialog.setLocationRelativeTo(null);
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
             dialog.setVisible(true);
         }
