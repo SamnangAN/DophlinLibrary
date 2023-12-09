@@ -112,10 +112,14 @@ public class LibrarySystem extends JFrame implements LibWindow {
     public void initCardPanel() {
     	if (mainPanel == null) {
     		mainPanel = new JPanel();
-    		cardPanel = new JPanel(new CardLayout());    	
-	    	cardPanel.add(CheckoutPanel.getInstance(), MENUS.CHECKOUTS.getText());
-	    	cardPanel.add(AllBookPanel.getInstance(), MENUS.BOOKS.getText());
-			cardPanel.add(AddNewMemberPanel.getInstance(), MENUS.MEMBERS.getText());    	
+    		cardPanel = new JPanel(new CardLayout());   
+    		if (SystemController.currentAuth == Auth.BOTH || SystemController.currentAuth == Auth.ADMIN) {
+    			cardPanel.add(AllBookPanel.getInstance(), MENUS.BOOKS.getText());
+    			cardPanel.add(AddNewMemberPanel.getInstance(), MENUS.MEMBERS.getText()); 
+    		}
+    		if (SystemController.currentAuth == Auth.BOTH || SystemController.currentAuth == Auth.LIBRARIAN) {
+    			cardPanel.add(CheckoutPanel.getInstance(), MENUS.CHECKOUTS.getText());
+    		}     		
 	    	mainPanel.add(cardPanel, BorderLayout.CENTER);
 	    	landscapePanel.setVisible(false);
 	    	LoginWindow.INSTANCE.setVisible(false);
@@ -188,19 +192,18 @@ public class LibrarySystem extends JFrame implements LibWindow {
     class MenuListener implements MouseListener {    	
     	 @Override
          public void mouseClicked(MouseEvent e) {
-             JMenuItem source = (JMenuItem) e.getSource();
+               
+         }
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			 JMenuItem source = (JMenuItem) e.getSource();
              String menuText = source.getText();
  			if (menuText.equals(MENUS.LOGOUT.getText())) {
  				setLoggedIn(false);
  			} else {
  				showCard(menuText);
  			}
-             
-         }
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
 
