@@ -110,7 +110,6 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
     
     public void initCardPanel() {
-    	if (mainPanel == null) {
     		mainPanel = new JPanel();
     		cardPanel = new JPanel(new CardLayout());   
     		if (SystemController.currentAuth == Auth.BOTH || SystemController.currentAuth == Auth.ADMIN) {
@@ -125,12 +124,13 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	    	LoginWindow.INSTANCE.setVisible(false);
 	    	mainPanel.setVisible(true);
 	    	getContentPane().add(mainPanel);
-    	}
+	    	createMenus();
     }
     
 
 	private void createMenus() {
 	     // Add the custom menu to the menu bar
+		menuBar = new JMenuBar();
 		if (SystemController.currentAuth == Auth.BOTH || SystemController.currentAuth == Auth.ADMIN) {
 			menuBar.add(createCustomJMenu(MENUS.BOOKS));
 			menuBar.add(createCustomJMenu(MENUS.MEMBERS));
@@ -159,11 +159,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		this.isLoggedIn = isLoggedIn;
 		if (this.isLoggedIn) {
 			initCardPanel();
-			createMenus();		
+					
 			CardLayout cardLayout = (CardLayout) cardPanel.getLayout();
 			cardLayout.first(cardPanel);
 		} else {
-			
 			mainPanel.setVisible(false);
 			initLandscapePanel();
 			menuBar.setVisible(false);
