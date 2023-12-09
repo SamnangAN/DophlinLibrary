@@ -36,7 +36,6 @@ import business.Book;
 import business.ControllerInterface;
 import business.SystemController;
 
-
 public class AddBookPanel extends JPanel {
 	private static AddBookPanel INSTANCE;
 
@@ -60,7 +59,8 @@ public class AddBookPanel extends JPanel {
 	private JTable table;
 	private Vector<String> columnNames = new Vector<>();
 	private Book book = new Book();
-	private JTextField firstNameField, lastNameField, streetField, cityField, stateField, zipField, telephoneField,bioField;
+	private JTextField firstNameField, lastNameField, streetField, cityField, stateField, zipField, telephoneField,
+			bioField;
 	private ControllerInterface ci = new SystemController();
 
 	public AddBookPanel() {
@@ -74,13 +74,13 @@ public class AddBookPanel extends JPanel {
 	}
 
 	public void prepareData() {
-    	book.resetAuthor();
-    	isbnTxtField.setText("");
-    	titleTxtField.setText("");
-    	maximunCheckoutTxtField.setText("");
-    	numberOfCopyTxtField.setText("");
-    	reloadTableForm();
-    }
+		book.resetAuthor();
+		isbnTxtField.setText("");
+		titleTxtField.setText("");
+		maximunCheckoutTxtField.setText("");
+		numberOfCopyTxtField.setText("");
+		reloadTableForm();
+	}
 
 	public JPanel init() {
 		JPanel backgroundPanel = new JPanel();
@@ -89,7 +89,7 @@ public class AddBookPanel extends JPanel {
 		JPanel menuLink = createMenuLink();
 
 		backgroundPanel.setLayout(new BorderLayout());
-		backgroundPanel.add(formPanel,BorderLayout.CENTER);
+		backgroundPanel.add(formPanel, BorderLayout.CENTER);
 		return backgroundPanel;
 
 	}
@@ -97,42 +97,42 @@ public class AddBookPanel extends JPanel {
 	private JPanel createMenuLink() {
 		JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JButton linkButton = new JButton(BACK_LBL);
-        linkButton.setFont(new Font("Arial", Font.PLAIN, 14));
-        linkButton.setForeground(Color.WHITE);
-        linkButton.setBorderPainted(false);
-        linkButton.setContentAreaFilled(false);
-        linkButton.setFocusPainted(false);
-        addHoverUnderlineText(linkButton);
-        linkButton.addActionListener(new CancelBookActionListener());
-        leftPanel.add(linkButton);
-        leftPanel.setOpaque(false);
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20,10));
-        return leftPanel;
+		linkButton.setFont(new Font("Arial", Font.PLAIN, 14));
+		linkButton.setForeground(Color.WHITE);
+		linkButton.setBorderPainted(false);
+		linkButton.setContentAreaFilled(false);
+		linkButton.setFocusPainted(false);
+		addHoverUnderlineText(linkButton);
+		linkButton.addActionListener(new CancelBookActionListener());
+		leftPanel.add(linkButton);
+		leftPanel.setOpaque(false);
+		leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+		return leftPanel;
 	}
 
 	private void addHoverUnderlineText(JButton linkButton) {
 		linkButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            	linkButton.setText("<html><u>" + BACK_LBL + "</u></html>");
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-            	linkButton.setText("<html><u>" + BACK_LBL + "</u></html>");
-            }
-        });
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				linkButton.setText("<html><u>" + BACK_LBL + "</u></html>");
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				linkButton.setText("<html><u>" + BACK_LBL + "</u></html>");
+			}
+		});
 
 	}
-
 
 	private JPanel createBookForm() {
 		JPanel form = new JPanel(new BorderLayout());
 		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(createFormTopPanel(),BorderLayout.NORTH);
+		topPanel.add(createFormTopPanel(), BorderLayout.NORTH);
 		topPanel.setOpaque(false);
 
 		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(createFormCenterPanel(),BorderLayout.CENTER);
+		centerPanel.add(createFormCenterPanel(), BorderLayout.CENTER);
 
 		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		JButton saveButton = new JButton("Add");
@@ -143,9 +143,9 @@ public class AddBookPanel extends JPanel {
 		bottomPanel.add(cancelButton);
 		bottomPanel.add(saveButton);
 
-		form.add(topPanel,BorderLayout.NORTH);
-		form.add(centerPanel,BorderLayout.CENTER);
-		form.add(bottomPanel,BorderLayout.SOUTH);
+		form.add(topPanel, BorderLayout.NORTH);
+		form.add(centerPanel, BorderLayout.CENTER);
+		form.add(bottomPanel, BorderLayout.SOUTH);
 		form.setOpaque(false);
 		return form;
 	}
@@ -154,16 +154,16 @@ public class AddBookPanel extends JPanel {
 		loadTableForm();
 		JPanel authorPanel = new JPanel(new BorderLayout());
 
-		JPanel addAuthor =new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel addAuthor = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		JLabel authorLbl = new JLabel("Author:");
 		JButton addAuthorButton = new JButton("+");
 		addAuthorButton.addActionListener(new AddAuthorActionListener());
 		addAuthor.add(authorLbl);
 		addAuthor.add(addAuthorButton);
 
-		authorPanel.add(addAuthor,BorderLayout.NORTH);
+		authorPanel.add(addAuthor, BorderLayout.NORTH);
 
-		JScrollPane tableScrollPane= new JScrollPane(table);
+		JScrollPane tableScrollPane = new JScrollPane(table);
 		authorPanel.add(tableScrollPane, BorderLayout.CENTER);
 
 		authorPanel.setOpaque(false);
@@ -179,7 +179,7 @@ public class AddBookPanel extends JPanel {
 		gbc.insets = new Insets(10, 10, 10, 10);
 
 		JLabel addNewBookLbl = new JLabel("Add New Book");
-		addNewBookLbl.setFont(new Font("Arial", Font.BOLD,20));
+		addNewBookLbl.setFont(new Font("Arial", Font.BOLD, 20));
 
 		JLabel isbnLbl = new JLabel("ISBN:");
 		isbnTxtField = new JTextField(15);
@@ -235,20 +235,19 @@ public class AddBookPanel extends JPanel {
 
 	private void loadTableForm() {
 		initColumnNames();
-		List<Author> authors =  book.getAuthors();
+		List<Author> authors = book.getAuthors();
 		Vector<Vector<Object>> authorList = covertToTableData(authors);
 		tableModel = new DefaultTableModel();
 		tableModel.setDataVector(authorList, columnNames);
 
-
-        table = new JTable(tableModel);
-        table.setPreferredScrollableViewportSize(new Dimension(1000,200));
+		table = new JTable(tableModel);
+		table.setPreferredScrollableViewportSize(new Dimension(1000, 200));
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
-        table.setRowSorter(sorter);
+		table.setRowSorter(sorter);
 	}
 
 	private void reloadTableForm() {
-		List<Author> authors =  book.getAuthors();
+		List<Author> authors = book.getAuthors();
 		Vector<Vector<Object>> authorList = covertToTableData(authors);
 		tableModel.setDataVector(authorList, columnNames);
 	}
@@ -280,39 +279,38 @@ public class AddBookPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			String mcl = maximunCheckoutTxtField.getText();
 			String ncp = numberOfCopyTxtField.getText();
-			if(!Util.isNumeric(ncp) || !Util.isNumeric(mcl)) {
+			if (!Util.isNumeric(ncp) || !Util.isNumeric(mcl)) {
 				JOptionPane.showMessageDialog(null, "Cannot read Maximum Checkout or Number of copy!");
-			}else {
-
-			book.setIsbn(isbnTxtField.getText());
-			book.setMaxCheckoutLength(Integer.parseInt(mcl));
-			book.setTitle(titleTxtField.getText());
-			book.setCopies(Integer.parseInt(ncp));
-			ci.saveBook(book);
-			AllBookPanel.getInstance().performFitler();
-			new CancelBookActionListener().actionPerformed(e);
+			} else {
+				String isbn = isbnTxtField.getText();
+				Book existingBook = ci.searchBook(isbn);
+				if (existingBook != null) {
+					JOptionPane.showMessageDialog(null, "ISBN already exist!!!");
+				} else {
+					book.setIsbn(isbn);
+					book.setMaxCheckoutLength(Integer.parseInt(mcl));
+					book.setTitle(titleTxtField.getText());
+					book.setCopies(Integer.parseInt(ncp));
+					ci.saveBook(book);
+					AllBookPanel.getInstance().performFitler();
+					new CancelBookActionListener().actionPerformed(e);
+				}
+			}
 		}
-		}
 
-    }
+	}
 
 	class CheckExitingIsbnActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String isbn = isbnTxtField.getText();
 			Book book = ci.searchBook(isbn);
-			if(book != null) {
-				AllBookPanel.getInstance().openPopupForm(isbn);
+			if (book != null) {
+				AllBookPanel.getInstance().openPopupForm(isbn, true);
 			}
-			book.setMaxCheckoutLength(Integer.parseInt(maximunCheckoutTxtField.getText()));
-			book.setTitle(titleTxtField.getText());
-			book.setCopies(Integer.parseInt(numberOfCopyTxtField.getText()));
-			ci.saveBook(book);
-			AllBookPanel.getInstance().performFitler();
-			new CancelBookActionListener().actionPerformed(e);
 		}
 
-    }
+	}
 
 	class CancelBookActionListener implements ActionListener {
 		@Override
@@ -321,10 +319,9 @@ public class AddBookPanel extends JPanel {
 			AllBookPanel.getInstance().backgroundPanelAddNewMember.setVisible(false);
 		}
 
-    }
+	}
 
 	class AddAuthorActionListener implements ActionListener {
-
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -332,79 +329,78 @@ public class AddBookPanel extends JPanel {
 		}
 
 		private void openPopupForm() {
-            JDialog dialog = new JDialog();
-            dialog.setTitle("Add Author");
+			JDialog dialog = new JDialog();
+			dialog.setTitle("Add Author");
 
-            JPanel mainPanel = new JPanel();
-	        mainPanel.setLayout(new GridLayout(9, 2, 10, 5));
+			JPanel mainPanel = new JPanel();
+			mainPanel.setLayout(new GridLayout(9, 2, 10, 5));
 
+			mainPanel.add(new JLabel("First Name:"));
+			firstNameField = new JTextField();
+			mainPanel.add(firstNameField);
 
-	        mainPanel.add(new JLabel("First Name:"));
-	        firstNameField = new JTextField();
-	        mainPanel.add(firstNameField);
+			mainPanel.add(new JLabel("Last Name:"));
+			lastNameField = new JTextField();
+			mainPanel.add(lastNameField);
 
-	        mainPanel.add(new JLabel("Last Name:"));
-	        lastNameField = new JTextField();
-	        mainPanel.add(lastNameField);
+			mainPanel.add(new JLabel("Street:"));
+			streetField = new JTextField();
+			mainPanel.add(streetField);
 
-	        mainPanel.add(new JLabel("Street:"));
-	        streetField = new JTextField();
-	        mainPanel.add(streetField);
+			mainPanel.add(new JLabel("City:"));
+			cityField = new JTextField();
+			mainPanel.add(cityField);
 
-	        mainPanel.add(new JLabel("City:"));
-	        cityField = new JTextField();
-	        mainPanel.add(cityField);
+			mainPanel.add(new JLabel("State:"));
+			stateField = new JTextField();
+			mainPanel.add(stateField);
 
-	        mainPanel.add(new JLabel("State:"));
-	        stateField = new JTextField();
-	        mainPanel.add(stateField);
+			mainPanel.add(new JLabel("ZIP:"));
+			zipField = new JTextField();
+			mainPanel.add(zipField);
 
-	        mainPanel.add(new JLabel("ZIP:"));
-	        zipField = new JTextField();
-	        mainPanel.add(zipField);
+			mainPanel.add(new JLabel("Telephone:"));
+			telephoneField = new JTextField();
+			mainPanel.add(telephoneField);
 
-	        mainPanel.add(new JLabel("Telephone:"));
-	        telephoneField = new JTextField();
-	        mainPanel.add(telephoneField);
+			mainPanel.add(new JLabel("Bio:"));
+			bioField = new JTextField();
+			mainPanel.add(bioField);
 
-	        mainPanel.add(new JLabel("Bio:"));
-	        bioField = new JTextField();
-	        mainPanel.add(bioField);
-
-            JButton submitButton = new JButton("Submit");
-            submitButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                	String firstName = firstNameField.getText();
+			JButton submitButton = new JButton("Submit");
+			submitButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String firstName = firstNameField.getText();
 					String lastName = lastNameField.getText();
 					String telephone = telephoneField.getText();
 					String street = streetField.getText();
 					String city = cityField.getText();
 					String zip = zipField.getText();
 					String stateNum = stateField.getText();
-					Address address = new Address(street, city, stateNum , zip);
-					String bio=bioField.getText();
+					Address address = new Address(street, city, stateNum, zip);
+					String bio = bioField.getText();
 					Author author = new Author(firstName, lastName, telephone, address, bio);
-                	book.addAuthor(author);
-                	reloadTableForm();
-                    JOptionPane.showMessageDialog(dialog, "New Author is saved");
-                    dialog.dispose();
-                }
-            });
-            mainPanel.add(submitButton);
-            mainPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-            JLabel lbl = new JLabel("Add New Author");
-            lbl.setFont(new Font("Arial", Font.BOLD,20));
-            dialog.setLayout(new BorderLayout());
-            dialog.add(mainPanel,BorderLayout.NORTH);
-            dialog.setSize(600, 450);
-            dialog.setModal(true);
-            dialog.setLocationRelativeTo(null);
-            dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					book.addAuthor(author);
+					reloadTableForm();
+					JOptionPane.showMessageDialog(dialog, "New Author is saved");
+					dialog.dispose();
+				}
+			});
+			mainPanel.add(submitButton);
+			mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+			JLabel lbl = new JLabel("Add New Author");
+			lbl.setFont(new Font("Arial", Font.BOLD, 20));
+			dialog.setLayout(new BorderLayout());
+			dialog.add(mainPanel, BorderLayout.NORTH);
+			dialog.setSize(600, 450);
+			dialog.setModal(true);
+			dialog.setLocationRelativeTo(null);
+			dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-            dialog.setVisible(true);
-        }
+			dialog.setVisible(true);
+		}
 
-    }
+	}
 
 }

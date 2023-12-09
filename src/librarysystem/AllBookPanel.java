@@ -296,12 +296,12 @@ public class AllBookPanel extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			int row = table.convertRowIndexToModel(table.getEditingRow());
 			String isbn = String.valueOf(table.getValueAt(table.getEditingRow(), 0));
-			openPopupForm(isbn);
+			openPopupForm(isbn,false);
 			fireEditingStopped();
 		}
 	}
 
-	public void openPopupForm(String isbn) {
+	public void openPopupForm(String isbn, boolean isAddFunctionality) {
 		JDialog dialog = new JDialog();
 		dialog.setTitle("Add New Copy");
 
@@ -320,10 +320,18 @@ public class AllBookPanel extends JPanel {
 					performFitler();
 					JOptionPane.showMessageDialog(dialog, "New Copies is saved");
 					dialog.dispose();
+					if(isAddFunctionality) {
+						AllBookPanel.getInstance().backgroundPanelMain.setVisible(true);
+						AllBookPanel.getInstance().backgroundPanelAddNewMember.setVisible(false);
+					}
 				}
 			}
 		});
+		
 		dialog.setLayout(new FlowLayout());
+		if(isAddFunctionality) {
+			dialog.add(new JLabel("Book is already eixists! Add copy instead?"));
+		}
 		dialog.add(new JLabel("Number of new copy:"));
 		dialog.add(textField);
 		dialog.add(submitButton);
