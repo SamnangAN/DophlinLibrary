@@ -1,5 +1,6 @@
 package dataaccess;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,7 +8,9 @@ import java.util.List;
 import business.Address;
 import business.Author;
 import business.Book;
+import business.BookCopy;
 import business.LibraryMember;
+import business.SystemController;
 
 /**
  * This class loads data into the data repository and also
@@ -35,31 +38,55 @@ public class TestData {
 	public void bookData() {
 		allBooks.get(0).addCopy();
 		allBooks.get(0).addCopy();
-		allBooks.get(1).addCopy();
-		allBooks.get(3).addCopy();
+	//	allBooks.get(1).addCopy();
+	//	allBooks.get(3).addCopy();
 		allBooks.get(2).addCopy();
 		allBooks.get(2).addCopy();
 		DataAccessFacade.loadBookMap(allBooks);
 	}
+	
 	
 	public void userData() {
 		DataAccessFacade.loadUserMap(allUsers);
 	}
 	
 	//create library members
-	public void libraryMemberData() {
+	public void libraryMemberData() {		
+		
 		LibraryMember libraryMember = new LibraryMember("1001", "Andy", "Rogers", "641-223-2211", addresses.get(4));
 		members.add(libraryMember);
-		libraryMember = new LibraryMember("1002", "Drew", "Stevens", "702-998-2414", addresses.get(5));
+
+		libraryMember = new LibraryMember("1002", "Drew", "Stevens", "702-998-2414", addresses.get(5));		
 		members.add(libraryMember);
 		
 		libraryMember = new LibraryMember("1003", "Sarah", "Eagleton", "451-234-8811", addresses.get(6));
 		members.add(libraryMember);
+	//	libraryMember.checkout(bookCopy, overDueDate.minusDays(bookCopy.getBook().getMaxCheckoutLength()), overDueDate);
 		
 		libraryMember = new LibraryMember("1004", "Ricardo", "Montalbahn", "641-472-2871", addresses.get(7));
 		members.add(libraryMember);
 		
+		
+		LocalDate overDueDate = LocalDate.now().minusDays(3);
+		//first checkout
+		BookCopy bookCopy = allBooks.get(0).getNextAvailableCopy();
+		members.get(0).checkout(bookCopy, overDueDate.minusDays(bookCopy.getBook().getMaxCheckoutLength()), overDueDate);
+		
+		//second checkout
+		bookCopy = allBooks.get(0).getNextAvailableCopy();
+		members.get(1).checkout(bookCopy, overDueDate.minusDays(bookCopy.getBook().getMaxCheckoutLength()), overDueDate);
+		
+		//third checkout
+		bookCopy = allBooks.get(0).getNextAvailableCopy();
+		members.get(2).checkout(bookCopy, LocalDate.now(), LocalDate.now().plusDays(bookCopy.getBook().getMaxCheckoutLength()));
+		
+		//fourth checkout
+		bookCopy = allBooks.get(2).getNextAvailableCopy();
+		members.get(0).checkout(bookCopy, LocalDate.now(), LocalDate.now().plusDays(bookCopy.getBook().getMaxCheckoutLength()));
+		
+		
 		DataAccessFacade.loadMemberMap(members);	
+		DataAccessFacade.loadBookMap(allBooks);
 	}
 	
 	///////////// DATA //////////////

@@ -172,6 +172,9 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	private void showCard(String selectedMenuText) {
 		CardLayout cl = (CardLayout) (cardPanel.getLayout());
 		cl.show(cardPanel, selectedMenuText);
+		if (selectedMenuText.equals(MENUS.BOOKS.getText())) {
+			AllBookPanel.getInstance().init();
+		}	
 	}
 
 
