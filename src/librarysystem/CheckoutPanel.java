@@ -50,7 +50,7 @@ public class CheckoutPanel extends JPanel {
 	private JTable resultTable;	
 	private final String[] headerNames = {"ISBN", "Title", "Copy number", "Library Member", "Checkout Date", "Due Date"};
 	
-    private DefaultTableModel allCheckoutDataSource = new DefaultTableModel(0, 0);
+    private DefaultTableModel allCheckoutDataSource = getReadOnlyTableModel();
     
     
     private ControllerInterface co = new SystemController();
@@ -88,7 +88,19 @@ public class CheckoutPanel extends JPanel {
 		return newPanel;
 	}
 	
-	
+	private DefaultTableModel getReadOnlyTableModel() {
+		//instance table model
+		@SuppressWarnings("serial")
+		DefaultTableModel tableModel = new DefaultTableModel(0,0) {
+
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       //all cells false
+		       return false;
+		    }
+		};
+		return tableModel;
+	}
 	
 	private void addCheckoutPanel() {
 		JPanel innerPanel = new JPanel();
@@ -155,7 +167,7 @@ public class CheckoutPanel extends JPanel {
 			try {
 				List<CheckoutRecordEntry> entries = co.getCheckoutRecord(memberId).getCheckoutRecordEntries();
 				tableDescription.setText("Checkout records for member " + memberId + ": ");
-				DefaultTableModel result = new DefaultTableModel(0, 0);	
+				DefaultTableModel result = getReadOnlyTableModel();	
 				result.setColumnIdentifiers(headerNames);
 				resultTable.setModel(result);
 				result.fireTableDataChanged();
@@ -191,7 +203,7 @@ public class CheckoutPanel extends JPanel {
 				System.out.println("Checking overdue for isbn: " + isbnOverDueField.getText());
 				HashMap<BookCopy, CheckoutRecordEntry> entries = co.checkBookOverdue(isbnOverDueField.getText());
 				tableDescription.setText("Overdue results: ");
-				DefaultTableModel result = new DefaultTableModel(0, 0);	
+				DefaultTableModel result = getReadOnlyTableModel();
 				result.setColumnIdentifiers(headerNames);
 				resultTable.setModel(result);
 				result.fireTableDataChanged();
