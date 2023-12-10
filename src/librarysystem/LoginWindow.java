@@ -13,18 +13,13 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import business.LoginException;
 import business.SystemController;
-import dataaccess.Auth;
-
-import javax.swing.JOptionPane;
-
-import business.LoginException;
-
 
 public class LoginWindow extends JFrame implements LibWindow {
 
@@ -33,6 +28,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 	private JTextField password;
 
 	private boolean isInitialized = false;
+
 	public boolean isInitialized() {
 		return isInitialized;
 	}
@@ -55,7 +51,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 		ImageBackgroundPanel backgroundPanel = new ImageBackgroundPanel(Util.getImagePath() + "login-background.png");
 
 		JPanel formPanel = createSigninForm();
-		
+
 		backgroundPanel.setLayout(new BorderLayout());
 		backgroundPanel.add(formPanel);
 
@@ -65,8 +61,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 		init();
 	}
 
-
-	public void init() {		
+	public void init() {
 		clear();
 	}
 
@@ -87,46 +82,32 @@ public class LoginWindow extends JFrame implements LibWindow {
 		JButton loginButton = new JButton("Login");
 		addLoginButtonListener(loginButton);
 
-		formPanel.add(usernameLabel, getGb(gbc, 0,0));
-		formPanel.add(username, getGb(gbc, 1,0));
-		formPanel.add(passwordLabel, getGb(gbc, 0,1));
-		formPanel.add(password, getGb(gbc, 1,1));
-		formPanel.add(loginButton, getGb(gbc,1,2));
+		formPanel.add(usernameLabel, getGb(gbc, 0, 0));
+		formPanel.add(username, getGb(gbc, 1, 0));
+		formPanel.add(passwordLabel, getGb(gbc, 0, 1));
+		formPanel.add(password, getGb(gbc, 1, 1));
+		formPanel.add(loginButton, getGb(gbc, 1, 2));
 		formPanel.setBorder(BorderFactory.createEmptyBorder(0, 300, 0, 0));
 		return formPanel;
 	}
-	
+
 	private GridBagConstraints getGb(GridBagConstraints gbc, int gridX, int gridY) {
 		gbc.gridx = gridX;
 		gbc.gridy = gridY;
 		return gbc;
 	}
-	
-	private static class ImageBackgroundPanel extends JPanel {
-        private Image backgroundImage;
 
-        public ImageBackgroundPanel(String imagePath) {
-            this.backgroundImage = new ImageIcon(imagePath).getImage();
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
-    }
-		
 	public static boolean isValidUsername(String username) {
-        String regex = "^[a-z0-9_]{3,16}$";
-        Pattern pattern = Pattern.compile(regex);
-        return pattern.matcher(username).matches();
-    }
-	
+		String regex = "^[a-z0-9_]{3,16}$";
+		Pattern pattern = Pattern.compile(regex);
+		return pattern.matcher(username).matches();
+	}
+
 	public static boolean isValidPassword(String password) {
-        String regex = "^[0-9a-zA-Z]+$";
-        Pattern pattern = Pattern.compile(regex);
-        return pattern.matcher(password).matches();
-    }
+		String regex = "^[0-9a-zA-Z]+$";
+		Pattern pattern = Pattern.compile(regex);
+		return pattern.matcher(password).matches();
+	}
 
 	private void addLoginButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
@@ -136,53 +117,52 @@ public class LoginWindow extends JFrame implements LibWindow {
 			System.out.println("Username: " + username.getText());
 			System.out.println("Password: " + password.getText());
 			try {
-				
+
 				if (isValidUsername(username.getText().toString())) {
-    				isValidUsername = true;
-				}else {
-					JOptionPane.showMessageDialog(this,"Username should be only small letter or number!");
-    				System.out.println("Username should be only small letter or number!");
+					isValidUsername = true;
+				} else {
+					JOptionPane.showMessageDialog(this, "Username should be only small letter or number!");
+					System.out.println("Username should be only small letter or number!");
 				}
-    			
-    			if (isValidUsername) {
+
+				if (isValidUsername) {
 					if (isValidPassword(password.getText().toString())) {
-	    				isValidPassword = true;
-					}else {
-						JOptionPane.showMessageDialog(this,"Password should be only number or letter!");
-	    				System.out.println("Password should be only number or letter!");
+						isValidPassword = true;
+					} else {
+						JOptionPane.showMessageDialog(this, "Password should be only number or letter!");
+						System.out.println("Password should be only number or letter!");
 					}
 				}
-    			
-    			
-    			if (isValidUsername && isValidPassword) {
-    				
-    				systemController.login(username.getText().toString(), password.getText().toString());
-    				
+
+				if (isValidUsername && isValidPassword) {
+
+					systemController.login(username.getText().toString(), password.getText().toString());
+
 					if (SystemController.currentAuth != null) {
 						LibrarySystem.INSTANCE.setLoggedIn(true);
 						LibrarySystem.INSTANCE.setVisible(true);
-						/* Auth.BOTH) {
-						LibrarySystem.INSTANCE.setLoggedIn(true);
-						LibrarySystem.hideAllWindows();
-						MainMenu.INSTANCE.init();
-						Util.centerFrameOnDesktop(MainMenu.INSTANCE);
-						MainMenu.INSTANCE.setVisible(true);
-					}else if(SystemController.currentAuth == Auth.LIBRARIAN || 
-						SystemController.currentAuth == Auth.ADMIN) {
-						LibrarySystem.hideAllWindows();
-						MiniMenu.INSTANCE.init();
-						Util.centerFrameOnDesktop(MiniMenu.INSTANCE);
-						MiniMenu.INSTANCE.setVisible(true);*/
-					}
-					else {
-						JOptionPane.showMessageDialog(this,"Username or Password mismatch!");
+					} else {
+						JOptionPane.showMessageDialog(this, "Username or Password mismatch!");
 					}
 				}
-    			
+
 			} catch (LoginException e) {
-				// TODO Auto-generated catch block
-				JOptionPane.showMessageDialog(this,e.getMessage());
+				JOptionPane.showMessageDialog(this, e.getMessage());
 			}
 		});
+	}
+
+	private static class ImageBackgroundPanel extends JPanel {
+		private Image backgroundImage;
+
+		public ImageBackgroundPanel(String imagePath) {
+			this.backgroundImage = new ImageIcon(imagePath).getImage();
+		}
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+		}
 	}
 }

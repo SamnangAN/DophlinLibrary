@@ -5,12 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CheckoutRecord implements Serializable{
-	private static final long serialVersionUID = 6578027413885460074L;	
-	
+public final class CheckoutRecord implements Serializable {
+	private static final long serialVersionUID = 6578027413885460074L;
+
 	private List<CheckoutRecordEntry> checkoutRecordEntries;
-	private LibraryMember libraryMember; 
-	
+	private LibraryMember libraryMember;
+
 	public CheckoutRecord(LibraryMember libraryMember) {
 		this.setCheckoutRecordEntries(new ArrayList<CheckoutRecordEntry>());
 		this.setLibraryMember(libraryMember);
@@ -23,7 +23,7 @@ public final class CheckoutRecord implements Serializable{
 	public void setCheckoutRecordEntries(List<CheckoutRecordEntry> checkoutRecordEntries) {
 		this.checkoutRecordEntries = checkoutRecordEntries;
 	}
-	
+
 	public CheckoutRecordEntry addCheckoutRecordEntry(BookCopy bookCopy, LocalDate checkoutDate, LocalDate dueDate) {
 		CheckoutRecordEntry entry = new CheckoutRecordEntry(bookCopy, checkoutDate, dueDate, this);
 		this.checkoutRecordEntries.add(entry);
@@ -42,5 +42,5 @@ public final class CheckoutRecord implements Serializable{
 	public void setLibraryMember(LibraryMember libraryMember) {
 		this.libraryMember = libraryMember;
 	}
-	
+
 }
